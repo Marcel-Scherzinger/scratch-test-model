@@ -4,8 +4,7 @@ use scratch_test_model::{ProjectDoc, UnsupportedBlockKind};
 
 #[test]
 fn read_all_standard_blocks() {
-    let res =
-        ProjectDoc::from_sb3_file("../../sb3/all-predefined-blocks.sb3").expect("valid document");
+    let res = ProjectDoc::from_sb3_file("sb3/all-predefined-blocks.sb3").expect("valid document");
 
     let doc = match res.ensure_no_invalid_blocks() {
         Ok(doc) => {

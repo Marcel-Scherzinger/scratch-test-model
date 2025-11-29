@@ -34,7 +34,8 @@
 //! [`ProjectDoc`] type which offers different methods for parsing a file or
 //! a sequence of bytes representing the file's content.
 //!
-//! ```
+//! ```no_run
+//! # use scratch_test_model::ProjectDoc;
 //! let doc = ProjectDoc::from_sb3_file("/path/to/file.sb3");
 //! println!("{doc:#?}");
 //! ```
@@ -50,8 +51,9 @@
 //! Use for example [`ProjectDoc::ensure_no_invalid_blocks`] on a parsed object to only
 //! allow completly usable blocks in the document.
 //!
-//! ```
-//! let doc = ProjectDoc::from_sb3_file("/path/to/file.sb3");
+//! ```no_run
+//! # use scratch_test_model::ProjectDoc;
+//! let doc = ProjectDoc::from_sb3_file("/path/to/file.sb3").expect("valid document");
 //! println!("Maybe also contains invalid blocks {doc:#?}");
 //!
 //! match doc.ensure_no_invalid_blocks() {
