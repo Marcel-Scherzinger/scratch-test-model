@@ -32,18 +32,13 @@ pub enum BlockKind {
 
 /// main block type is [`BlockKind`]
 #[derive(Debug, derive_more::From, PartialEq, Clone, Copy, derive_more::Display)]
+#[display("{_variant}")]
 pub enum BlockKindUnit {
-    #[display("{_0}")]
     Event(EventBlockKindUnit),
-    #[display("{_0}")]
     Cmp(CmpBlockKindUnit),
-    #[display("{_0}")]
     Expr(ExprBlockKindUnit),
-    #[display("{_0}")]
     Stmt(StmtBlockKindUnit),
-    #[display("{_0}")]
     Noop(NoopStmtBlockKindUnit),
-    #[display("{_0}")]
     Unsup(UnsupportedBlockKindUnit),
     #[display("procedures_prototype")]
     ProceduresPrototype,
