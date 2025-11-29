@@ -139,7 +139,7 @@ pub use interpret_json::OpcodeNum;
 pub use error::{DocError, Error};
 pub use reader::json_from_sb3_stream;
 pub use scopes::*;
-pub use scratch_expr::{SValue, SValue as VariableValue, ScratchExpr};
+pub use scratch_expr::{SValue, SValue as VariableValue};
 
 pub mod attr {
     pub use crate::interpret_json::{
