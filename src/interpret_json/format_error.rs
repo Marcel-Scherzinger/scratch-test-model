@@ -1,5 +1,9 @@
 use super::CmpUsingDisplay;
-use crate::{error::IntegerOutOfBounds, interpret_json::OpcodeNum};
+use crate::{
+    attr::{List, Variable},
+    error::IntegerOutOfBounds,
+    interpret_json::{OpcodeNum, data_error::DataEntityFormatError},
+};
 
 #[derive(Debug, thiserror::Error, PartialEq)]
 pub enum FormatError {
@@ -20,15 +24,10 @@ pub enum FormatError {
     #[error("found opcode={0} is invalid at this point")]
     UnexpectedOpcode(OpcodeNum),
 
-    #[error("missing variable name (text) at index={0}")]
-    MissingVarName(u8),
-    #[error("missing variable id (text) at index={0}")]
-    MissingVarId(u8),
-
-    #[error("missing list name (text) at index={0}")]
-    MissingListName(u8),
-    #[error("missing list id (text) at index={0}")]
-    MissingListId(u8),
+    #[error("variable error: {0}")]
+    Variable(#[from] DataEntityFormatError<Variable>),
+    #[error("list error: {0}")]
+    List(#[from] DataEntityFormatError<List>),
 
     #[error("missing text primitive at index={0}")]
     MissingTextPrim(u8),

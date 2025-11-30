@@ -5,12 +5,12 @@ use super::_macros::def_dt_impl;
 use crate::interpret_json as ij;
 
 def_dt_impl!(
-    Variable: "variable" { ij::get_variable_ref },
-    DropdownSelection: "dropdown" { ij::get_dropdown_selection },
-    Expression: "expression" { ij::get_expression },
-    RefBlock: "blockref" { ij::get_block_ref },
-    List: "listref" { ij::get_list_ref },
-    ArgumentReporterName: "argumentreportername" { ij::get_argument_reporter_name },
+    Variable: "variable" { ij::Variable::parse_from_json },
+    DropdownSelection: "dropdown" { ij::DropdownSelection::parse_from_json },
+    Expression: "expression" { ij::Expression::parse_from_json },
+    RefBlock: "blockref" { ij::RefBlock::parse_from_json },
+    List: "listref" { ij::List::parse_from_json },
+    ArgumentReporterName: "argumentreportername" { ij::ArgumentReporterName::parse_from_json },
 
     Option<Variable>: "optional variable",
     Option<Expression>: "optional expression",

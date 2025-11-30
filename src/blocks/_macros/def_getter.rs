@@ -41,11 +41,11 @@ macro_rules! getter {
             Ok(None)
         }
     }};
-    (;; blockref, $arg: expr) => { crate::interpret_json::get_block_ref($arg) };
-    (;; listref, $arg: expr) => { crate::interpret_json::get_list_ref($arg) };
-    (;; variableref, $arg: expr) => { crate::interpret_json::get_variable_ref($arg) };
-    (;; expression, $arg: expr) => { crate::interpret_json::get_expression($arg) };
-    (;; dropdown, $arg: expr) => { crate::interpret_json::get_dropdown_selection($arg) };
-    (;; argumentreporter, $arg: expr) => { crate::interpret_json::get_argument_reporter_name($arg) };
+    (;; blockref, $arg: expr) => { crate::interpret_json::RefBlock::parse_from_json($arg) };
+    (;; listref, $arg: expr) => { crate::interpret_json::List::parse_from_json($arg) };
+    (;; variableref, $arg: expr) => { crate::interpret_json::Variable::parse_from_json($arg) };
+    (;; expression, $arg: expr) => { crate::interpret_json::Expression::parse_from_json($arg) };
+    (;; dropdown, $arg: expr) => { crate::interpret_json::Dropdown::parse_from_json($arg) };
+    (;; argumentreporter, $arg: expr) => { crate::interpret_json::ArgumentReporterName::parse_from_json($arg) };
 }
 pub(crate) use getter;

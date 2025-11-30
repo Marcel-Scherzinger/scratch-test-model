@@ -1,8 +1,7 @@
 use crate::{
     BlockKind,
     blocks::{BlockKindError, ExprBlockKind, ParseKindError},
-    constants,
-    interpret_json::{List, Variable},
+    constants, interpret_json as ij,
 };
 
 impl crate::ext::FromJsonExt<Self, BlockKindError> for BlockKind {
@@ -37,16 +36,15 @@ impl crate::ext::FromJsonExt<Self, BlockKindError> for BlockKind {
             }
         } else if obj.is_array() {
             // variable or list reading block
-            let opcode_num = crate::interpret_json::get_opcode(obj)
-                .map_err(|_| BlockKindError::NoOpcodeInArr)?;
+            let opcode_num = ij::get_opcode(obj).map_err(|_| BlockKindError::NoOpcodeInArr)?;
             use constants::*;
             match opcode_num {
                 VAR_PRIMITIVE => {
-                    let variable: Variable = crate::interpret_json::get_variable_ref(obj)?;
+                    let variable: ij::Variable = ij::Variable::parse_from_json(obj)?;
                     Ok(ExprBlockKind::RDataVar { variable }.into())
                 }
                 LIST_PRIMITIVE => {
-                    let list: List = crate::interpret_json::get_list_ref(obj)?;
+                    let list: ij::List = ij::List::parse_from_json(obj)?;
                     Ok(ExprBlockKind::RDataList { list }.into())
                 }
                 _ => Err(BlockKindError::InvalidBlockType),
