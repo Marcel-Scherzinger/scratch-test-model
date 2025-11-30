@@ -44,8 +44,13 @@ fn parse_variable(id: Id, def: &serde_json::Value) -> Option<(Variable, Variable
     let initial = if let Some(num) = def[1].as_number() {
         // TODO: integer out of range case is ignored
         VariableValue::try_from(num.clone()).ok()?
+    } else if let Some(boo) = def[1].as_bool() {
+        VariableValue::Bool(boo)
+    } else if let Some(tex) = def[1].as_str() {
+        VariableValue::Text(tex.into())
     } else {
-        VariableValue::Text(def[1].as_str()?.into())
+        log::warn!("failed to parse value of variable {name:?}: definition is {def:?}");
+        return None;
     };
     Some((Variable::new(name, id), initial))
 }
