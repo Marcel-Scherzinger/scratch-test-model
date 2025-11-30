@@ -1,5 +1,5 @@
 use crate::attr::{DropdownSelection, Expression, List, RefBlock, Variable};
-use crate::{ARc, Id};
+use crate::{ARc, CmpBlockKind, Id};
 
 super::define_blocks! {
     #[derive(Debug, PartialEq, Clone)]
@@ -24,30 +24,30 @@ super::define_blocks! {
         duration: Expression,
     },
     "control_if" => ControlIf {
-        condition: Option<RefBlock>,
-        substack: Option<RefBlock>,
+        condition: Option<RefBlock<CmpBlockKind>>,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
     "control_forever" => ControlForever {
-        substack: Option<RefBlock>,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
     "control_stop" => ControlStop {
         (field) stop_option: DropdownSelection,
     },
     "control_wait_until" => ControlWaitUntil {
-        condition: Option<RefBlock>,
+        condition: Option<RefBlock<CmpBlockKind>>,
     },
     "control_repeat" => ControlRepeat {
         times: Expression,
-        substack: Option<RefBlock>,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
     "control_if_else" => ControlIfElse {
-        condition: Option<RefBlock>,
-        substack: Option<RefBlock>,
-        substack2: Option<RefBlock>,
+        condition: Option<RefBlock<CmpBlockKind>>,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
+        substack2: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
     "control_repeat_until" => ControlRepeatuntil {
-        condition: Option<RefBlock>,
-        substack: Option<RefBlock>,
+        condition: Option<RefBlock<CmpBlockKind>>,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
 
     "data_deleteoflist" => DataDeleteoflist {

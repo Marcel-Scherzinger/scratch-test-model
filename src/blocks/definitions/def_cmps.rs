@@ -9,12 +9,12 @@ super::define_blocks! {
     },
 
     "operator_and" => OperatorAnd {
-        operand1: RefBlock,
-        operand2: RefBlock,
+        operand1: RefBlock<CmpBlockKind>,
+        operand2: RefBlock<CmpBlockKind>,
     },
     "operator_or" => OperatorOr {
-        operand1: RefBlock,
-        operand2: RefBlock,
+        operand1: RefBlock<CmpBlockKind>,
+        operand2: RefBlock<CmpBlockKind>,
     },
     "operator_equals" => OperatorEquals {
         operand1: Expression,
@@ -34,7 +34,7 @@ super::define_blocks! {
     },
     "operator_not" => OperatorNot {
         /// reference to boolean expression that should be negated
-        operand: RefBlock,
+        operand: RefBlock<CmpBlockKind>,
     },
 
     "data_listcontainsitem" => DataListcontainsitem {

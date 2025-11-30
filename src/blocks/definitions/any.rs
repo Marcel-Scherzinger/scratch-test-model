@@ -13,7 +13,8 @@ pub enum BlockKind {
     #[from(skip)]
     ProceduresDefinition {
         /// block id of matching [Self::ProceduresPrototype] instance
-        custom_block: RefBlock,
+        // TODO: add specific ProceduresPrototype for better reference?
+        custom_block: RefBlock<BlockKind>,
     },
     #[from(skip)]
     ProceduresPrototype {

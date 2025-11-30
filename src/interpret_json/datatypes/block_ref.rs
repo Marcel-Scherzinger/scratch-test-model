@@ -1,12 +1,14 @@
+use std::hash::Hash;
+
 use super::{FormatError, OpcodeNum, get_opcode};
 use crate::{ARc, Id};
-use derive_more::{Debug, Deref, From};
+use derive_more::{Debug, Deref};
 
-#[derive(Debug, PartialEq, Deref, From, Eq, PartialOrd, Ord, Hash, Clone)]
+#[derive(Debug, Deref, PartialOrd, Ord, Clone)]
 #[debug("{_0:?}")]
-pub struct RefBlock(Id);
+pub struct RefBlock<K>(#[deref] Id, std::marker::PhantomData<K>);
 
-impl RefBlock {
+impl<K> RefBlock<K> {
     pub fn id(&self) -> &Id {
         &self.0
     }
@@ -30,4 +32,21 @@ impl RefBlock {
     }
 }
 
-super::_macros::impl_string_from!(RefBlock, ARc<str>);
+super::_macros::impl_string_from!({T} RefBlock<T>, ARc<str>);
+
+impl<K> Eq for RefBlock<K> {}
+impl<K> PartialEq for RefBlock<K> {
+    fn eq(&self, other: &Self) -> bool {
+        self.0 == other.0
+    }
+}
+impl<K> Hash for RefBlock<K> {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.0.hash(state);
+    }
+}
+impl<K> std::convert::From<ARc<str>> for RefBlock<K> {
+    fn from(value: ARc<str>) -> Self {
+        Self(value, std::marker::PhantomData)
+    }
+}

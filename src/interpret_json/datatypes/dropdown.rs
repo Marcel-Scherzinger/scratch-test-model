@@ -2,7 +2,7 @@ use super::{FormatError, OpcodeNum, get_opcode};
 use crate::ARc;
 use derive_more::{Debug, Deref, From};
 
-#[derive(Debug, PartialEq, Deref, From)]
+#[derive(Debug, PartialEq, Deref, From, Clone)]
 #[debug("{_0:?}")]
 pub struct DropdownSelection(ARc<str>);
 
