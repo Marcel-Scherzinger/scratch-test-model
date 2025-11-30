@@ -2,9 +2,8 @@ use itertools::Itertools;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use scratch_test_model::ProjectDoc;
 
-#[test]
-fn try_parsing_further() {
-    let walker = walkdir::WalkDir::new("sb3/further").into_iter();
+fn parse_in_folder(folder: &str) {
+    let walker = walkdir::WalkDir::new(folder).into_iter();
     let files = walker.flatten().collect_vec();
 
     let errors: Vec<_> = files
@@ -30,4 +29,9 @@ fn try_parsing_further() {
             .join("");
         panic!("Failed to parse {count} files:\n\n{out}");
     }
+}
+
+#[test]
+fn try_parsing_further() {
+    parse_in_folder("sb3/further");
 }
