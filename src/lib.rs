@@ -113,6 +113,7 @@
 pub mod constants;
 
 mod a_rc_string;
+mod ast;
 mod blocks;
 pub mod error;
 mod ext;
