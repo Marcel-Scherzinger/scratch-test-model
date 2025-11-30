@@ -33,5 +33,15 @@ fn parse_in_folder(folder: &str) {
 
 #[test]
 fn try_parsing_further() {
-    parse_in_folder("sb3/further");
+    parse_in_folder("sb3/further/valid");
+}
+
+// As described in [https://github.com/Marcel-Scherzinger/scratch-test-model/issues/3]
+// this currently doesn't work
+//
+// It's marked as `should_panic` so it's noticed if a future version of a dependency fixes this
+#[test]
+#[should_panic]
+fn try_parsing_io_unsupported_archive() {
+    parse_in_folder("sb3/further/unsupported-archive");
 }
