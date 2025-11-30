@@ -1,12 +1,12 @@
 use itertools::Itertools;
 
 use super::Target;
+use crate::ARc;
 use crate::error::JsonCtxError;
 use crate::{
     Id,
     blocks::{BlockKindError, UnsupportedBlockKind},
 };
-use std::rc::Rc;
 
 /// Represents an entire sb3 program file with all [`Target`]s,
 /// blocks ([`TargetBlocks`](crate::TargetBlocks)) and
@@ -16,16 +16,18 @@ use std::rc::Rc;
 #[derive(Debug, derive_getters::Getters, Clone, PartialEq)]
 pub struct ProjectDoc {
     /// Targets of the document, see [`Target`] for details
-    pub(crate) targets: Rc<[Target]>,
+    pub(crate) targets: ARc<[Target]>,
     /// The version number stored as metadata in the document
     ///
     /// This field is currently unused by the implementation
     /// but may be used in the future to detect compatible files
-    pub(crate) semver: Option<Rc<str>>,
+    pub(crate) semver: Option<ARc<str>>,
 }
 impl ProjectDoc {
     /// Iterator of all _invalid_ blocks regardless of the [target](`Target`)
-    pub fn invalid_blocks(&self) -> impl Iterator<Item = (&Id, &Rc<JsonCtxError<BlockKindError>>)> {
+    pub fn invalid_blocks(
+        &self,
+    ) -> impl Iterator<Item = (&Id, &ARc<JsonCtxError<BlockKindError>>)> {
         self.targets.iter().flat_map(|t| t.blocks().iter_invalid())
     }
     pub fn unsupported_blocks(&self) -> impl Iterator<Item = (&Id, &UnsupportedBlockKind)> {
@@ -33,7 +35,7 @@ impl ProjectDoc {
             .iter()
             .flat_map(|t| t.blocks().iter_unsupported_blocks())
     }
-    pub fn unknown_blocks(&self) -> impl Iterator<Item = (&Id, &Rc<str>)> {
+    pub fn unknown_blocks(&self) -> impl Iterator<Item = (&Id, &ARc<str>)> {
         self.targets
             .iter()
             .flat_map(|t| t.blocks().iter_unknown_blocks())
@@ -60,13 +62,13 @@ impl ProjectDoc {
         }
     }
 
-    pub fn ids_with_blocks(&self) -> impl Iterator<Item = (Id, Rc<str>)> {
+    pub fn ids_with_blocks(&self) -> impl Iterator<Item = (Id, ARc<str>)> {
         self.targets()
             .iter()
             .flat_map(|t| t.blocks().ids_with_blocks())
     }
 
-    pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (Id, Rc<str>)> {
+    pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (Id, ARc<str>)> {
         self.ids_with_blocks().sorted().unique()
     }
 }

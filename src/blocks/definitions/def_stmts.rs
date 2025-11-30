@@ -88,7 +88,7 @@ super::define_blocks! {
         ("procedures_call")  ProceduresCall {
             // argument_values: HashMap<Id, Expression>,
             proccode: ARc<str>,
-            // argumentids: Rc<[Rc<str>]>,
+            // argumentids: ARc<[ARc<str>]>,
             arguments: ARc<[(Id, Option<Expression>)]>
         },
     },

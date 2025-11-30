@@ -3,6 +3,7 @@ use super::{
     CmpBlockKindUnit, EventBlockKindUnit, ExprBlockKindUnit, NoopStmtBlockKindUnit,
     StmtBlockKindUnit, UnsupportedBlockKind, UnsupportedBlockKindUnit,
 };
+use crate::ARc;
 use crate::attr::{ProcedureArgumentDef, RefBlock};
 use crate::blocks::dt_interface::GetOpcodeUnit;
 
@@ -19,7 +20,7 @@ pub enum BlockKind {
         /// representation of procedure's name with placeholders for arguments
         proccode: String,
         /// a sequence of arguments this procedure accepts
-        arguments: std::rc::Rc<[ProcedureArgumentDef]>,
+        arguments: ARc<[ProcedureArgumentDef]>,
     },
 
     Event(EventBlockKind),
