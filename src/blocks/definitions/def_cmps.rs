@@ -1,7 +1,7 @@
 use crate::attr::{ArgumentReporterName, Expression, List, RefBlock};
 
 super::define_blocks! {
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Clone)]
     pub enum CmpBlockKind (CmpBlockKindUnit):
 
     "argument_reporter_boolean" => ArgumentReporterBoolean {

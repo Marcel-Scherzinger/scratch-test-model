@@ -8,7 +8,7 @@ use crate::attr::{ProcedureArgumentDef, RefBlock};
 use crate::blocks::dt_interface::GetOpcodeUnit;
 
 /// opcode block type is [`BlockKindUnit`]
-#[derive(Debug, derive_more::From, PartialEq)]
+#[derive(Debug, derive_more::From, PartialEq, Clone)]
 pub enum BlockKind {
     #[from(skip)]
     ProceduresDefinition {

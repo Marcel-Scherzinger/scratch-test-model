@@ -2,7 +2,7 @@ use crate::attr::{DropdownSelection, Expression, List, RefBlock, Variable};
 use crate::{ARc, Id};
 
 super::define_blocks! {
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Clone)]
     pub enum StmtBlockKind (StmtBlockKindUnit):
 
     "looks_sayforsecs" => LooksSayforsecs {

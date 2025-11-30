@@ -1,5 +1,5 @@
 super::define_blocks! {
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Clone)]
     pub enum NoopStmtBlockKind (NoopStmtBlockKindUnit):
 
     "data_showvariable" => DataShowvariable,

@@ -1,7 +1,7 @@
 use crate::attr::DropdownSelection;
 
 super::define_blocks! {
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Clone)]
     pub enum EventBlockKind (EventBlockKindUnit):
 
     "event_whenflagclicked" => EventWhenflagclicked,
