@@ -1,5 +1,5 @@
 use super::RefBlock;
-use crate::{BlockKind, ExprBlockKind, VariableValue};
+use crate::{BlockKind, VariableValue};
 
 #[derive(Debug, derive_getters::Getters, PartialEq, Clone)]
 pub struct ProcedureArgumentDef {

@@ -1,14 +1,13 @@
 use super::get_maybe_number;
 use super::{FormatError, List, OpcodeNum, RefBlock, Variable, get_opcode};
 
-use crate::BlockKind;
+use crate::ExprOrCmpBlockKind;
 use crate::scratch_expr::SValue;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     Var(Variable),
-    // TODO: extra CmpOrExprBlockKind type for more specific reference
-    Blo(RefBlock<BlockKind>),
+    Blo(RefBlock<ExprOrCmpBlockKind>),
     Lit(SValue),
     Lis(List),
 }

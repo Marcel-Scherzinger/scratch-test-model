@@ -123,14 +123,14 @@ mod scratch_expr;
 
 pub use blocks::GetOpcodeUnit;
 pub use blocks::{
-    BlockKind, CmpBlockKind, EventBlockKind, ExprBlockKind, NoopStmtBlockKind, StmtBlockKind,
-    UnsupportedBlockKind,
+    BlockKind, CmpBlockKind, EventBlockKind, ExprBlockKind, ExprOrCmpBlockKind, NoopStmtBlockKind,
+    StmtBlockKind, UnsupportedBlockKind,
 };
 
 pub mod block_opcodes {
     pub use crate::blocks::{
         BlockKindUnit, CmpBlockKindUnit, EventBlockKindUnit, ExprBlockKindUnit,
-        NoopStmtBlockKindUnit, StmtBlockKindUnit, UnsupportedBlockKindUnit,
+        ExprOrCmpBlockKindUnit, NoopStmtBlockKindUnit, StmtBlockKindUnit, UnsupportedBlockKindUnit,
     };
 }
 
