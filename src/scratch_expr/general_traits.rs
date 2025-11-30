@@ -1,5 +1,6 @@
-use std::{convert::Infallible, rc::Rc, str::FromStr};
+use std::{convert::Infallible, str::FromStr};
 
+use crate::ARc;
 use crate::error::{FormatError, IntegerOutOfBounds};
 
 use super::SValue;
@@ -27,8 +28,8 @@ impl From<String> for SValue {
     }
 }
 
-impl From<Rc<str>> for SValue {
-    fn from(value: Rc<str>) -> Self {
+impl From<ARc<str>> for SValue {
+    fn from(value: ARc<str>) -> Self {
         Self::Text(value)
     }
 }

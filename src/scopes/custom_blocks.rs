@@ -1,12 +1,12 @@
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
 use crate::{
-    BlockWrapper, Id, TargetBlocks,
+    ARc, BlockWrapper, Id, TargetBlocks,
     attr::{Expression, ProcedureArgumentDef},
 };
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::From, Clone)]
-pub struct ProcedureId(Rc<str>);
+pub struct ProcedureId(ARc<str>);
 
 impl ProcedureId {
     pub fn generate_from<'a>(
@@ -23,7 +23,7 @@ impl ProcedureId {
     }
     pub fn generate_from_fields(
         proccode: &str,
-        arguments: &Rc<[(Id, Option<Expression>)]>,
+        arguments: &ARc<[(Id, Option<Expression>)]>,
     ) -> Self {
         Self::generate_from(proccode, arguments.iter().map(|(a, _)| a.as_ref()))
     }
@@ -37,11 +37,11 @@ impl ProcedureId {
 #[derive(Debug, PartialEq, derive_getters::Getters)]
 pub struct Procedure {
     proccode: String,
-    definition_block: Rc<BlockWrapper>,
+    definition_block: ARc<BlockWrapper>,
     prototype_block_id: Id,
     /// generated using proccode and arguments
     procedure_id: ProcedureId,
-    arguments: std::rc::Rc<[ProcedureArgumentDef]>,
+    arguments: ARc<[ProcedureArgumentDef]>,
 }
 
 /// This component has no equivalent in the scratch file format

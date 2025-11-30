@@ -2,7 +2,7 @@ mod as_is_type;
 mod general_traits;
 mod svalue;
 
-use std::rc::Rc;
+use crate::ARc;
 
 /// This should model a Scratch value.
 /// Scratch treats texts that are non-numeric as the number `0` and also stores numbers
@@ -13,7 +13,7 @@ use std::rc::Rc;
 #[derive(derive_more::Debug, Clone, derive_more::Display, PartialEq)]
 pub enum SValue {
     #[debug("{_0:?}")]
-    Text(Rc<str>),
+    Text(ARc<str>),
     #[debug("{_0:?}")]
     Int(i64),
     #[debug("{_0:?}")]

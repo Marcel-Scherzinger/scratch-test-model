@@ -1,5 +1,6 @@
-use std::{borrow::Cow, rc::Rc};
+use std::borrow::Cow;
 
+use crate::ARc;
 use crate::{blocks::definitions::UnsupportedBlockKind, interpret_json::FormatError};
 
 #[derive(Debug, thiserror::Error, PartialEq)]
@@ -28,7 +29,7 @@ pub enum BlockKindError {
 
     /// The block is unknown
     #[error("the provided block ({0:?}) is unknown")]
-    UnknownBlock(Rc<str>),
+    UnknownBlock(ARc<str>),
     /// The block is known and (intentionally) unsupported.
     /// Programs containing this block get rejected.
     #[error("the provided block with opcode ({0:?}) is unsupperted")]
@@ -80,7 +81,7 @@ impl std::error::Error for BlockAttrError {}
 pub(super) enum ParseKindError {
     MissingAttr(super::BlockAttrError),
     #[from(skip)]
-    OpcodeUnknown(Rc<str>),
+    OpcodeUnknown(ARc<str>),
     OpcodeUnsupported(UnsupportedBlockKind),
     BlockKind(BlockKindError),
 }

@@ -1,12 +1,11 @@
-use std::rc::Rc;
-
 use super::{FormatError, OpcodeNum, get_opcode};
+use crate::ARc;
 
 #[derive(derive_more::Debug, PartialEq, derive_more::Deref, derive_more::From)]
 #[debug("{_0:?}")]
-pub struct ArgumentReporterName(Rc<str>);
+pub struct ArgumentReporterName(ARc<str>);
 
-super::_macros::impl_string_from!(ArgumentReporterName, Rc<str>);
+super::_macros::impl_string_from!(ArgumentReporterName, ARc<str>);
 
 pub(crate) fn get_argument_reporter_name(
     val: &serde_json::Value,

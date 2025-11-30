@@ -155,7 +155,7 @@ impl ProjectDoc {
     /// Parses a document from a json value
     pub fn from_json(doc: serde_json::Value) -> Result<ProjectDoc, Error> {
         use crate::ext::WithJsonContextExt;
-        let semver = doc["meta"]["semver"].as_str().map(std::rc::Rc::from);
+        let semver = doc["meta"]["semver"].as_str().map(crate::ARc::from);
         let targets = doc["targets"]
             .as_array()
             .ok_or(TargetError::NoTargetsArray)

@@ -1,6 +1,5 @@
-use std::rc::Rc;
-
 use super::{FormatError, OpcodeNum, get_opcode};
+use crate::ARc;
 use crate::Id;
 
 #[derive(
@@ -26,7 +25,7 @@ impl RefBlock {
     }
 }
 
-super::_macros::impl_string_from!(RefBlock, Rc<str>);
+super::_macros::impl_string_from!(RefBlock, ARc<str>);
 
 pub(crate) fn get_block_ref(val: &serde_json::Value) -> Result<RefBlock, FormatError> {
     // val is a single string

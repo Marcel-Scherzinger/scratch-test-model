@@ -2,7 +2,7 @@ use crate::Id;
 
 use super::{FormatError, get_opcode};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, derive_getters::Getters, Clone, PartialEq, Eq)]
 pub struct Variable {
     name: String,
     id: Id,
@@ -10,12 +10,6 @@ pub struct Variable {
 impl Variable {
     pub fn new(name: String, id: Id) -> Self {
         Self { name, id }
-    }
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-    pub fn id(&self) -> &Id {
-        &self.id
     }
 }
 

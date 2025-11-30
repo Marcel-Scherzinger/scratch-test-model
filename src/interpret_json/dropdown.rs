@@ -1,12 +1,11 @@
-use std::rc::Rc;
-
 use super::{FormatError, OpcodeNum, get_opcode};
+use crate::ARc;
 
 #[derive(derive_more::Debug, PartialEq, derive_more::Deref, derive_more::From)]
 #[debug("{_0:?}")]
-pub struct DropdownSelection(Rc<str>);
+pub struct DropdownSelection(ARc<str>);
 
-super::_macros::impl_string_from!(DropdownSelection, Rc<str>);
+super::_macros::impl_string_from!(DropdownSelection, ARc<str>);
 
 pub(crate) fn get_dropdown_selection(
     val: &serde_json::Value,

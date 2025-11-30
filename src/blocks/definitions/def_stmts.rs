@@ -1,6 +1,5 @@
-use crate::Id;
 use crate::attr::{DropdownSelection, Expression, List, RefBlock, Variable};
-use std::rc::Rc;
+use crate::{ARc, Id};
 
 super::define_blocks! {
     #[derive(Debug, PartialEq)]
@@ -88,9 +87,9 @@ super::define_blocks! {
     skip => {
         ("procedures_call")  ProceduresCall {
             // argument_values: HashMap<Id, Expression>,
-            proccode: Rc<str>,
+            proccode: ARc<str>,
             // argumentids: Rc<[Rc<str>]>,
-            arguments: Rc<[(Id, Option<Expression>)]>
+            arguments: ARc<[(Id, Option<Expression>)]>
         },
     },
 }

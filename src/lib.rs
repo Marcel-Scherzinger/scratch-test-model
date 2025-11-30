@@ -112,6 +112,7 @@
 /// copied from [<https://github.com/scratchfoundation/scratch-vm/blob/develop/src/serialization/sb3.js>]
 pub mod constants;
 
+mod a_rc_string;
 mod blocks;
 pub mod error;
 mod ext;
@@ -133,7 +134,7 @@ pub mod block_opcodes {
     };
 }
 
-pub type Id = std::rc::Rc<str>;
+pub type Id = crate::ARc<str>;
 pub use interpret_json::OpcodeNum;
 
 pub use error::{DocError, Error};
@@ -147,3 +148,4 @@ pub mod attr {
         Variable,
     };
 }
+pub use a_rc_string::ARc;
