@@ -52,7 +52,7 @@ pub(crate) fn get_expression(val: &serde_json::Value) -> Result<Expression, Form
             return Ok(Expression::Lit(t.parse().unwrap()));
         }
 
-        _ => panic!("unknown opcode={opcode} in object: {val:?}"),
+        _ => return Err(FormatError::UnexpectedOpcode(opcode)),
     }
     .map(Expression::Lit)
 }
