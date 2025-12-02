@@ -1,3 +1,4 @@
+use crate::ast::definitions::ParseAstFromBlocks;
 use crate::ast::{CmpNode, ExprOrCmpNode, StmtSequenceNode};
 use crate::attr::{DropdownSelection, List, Variable};
 use crate::{ARc, Id};
@@ -90,3 +91,20 @@ pub enum StmtNode {
         arguments: ARc<[(Id, Option<ExprOrCmpNode>)]>,
     },
 }
+
+impl ParseAstFromBlocks for StmtNode {
+    type AstParseErr = StmtNodeAstError;
+
+    fn parse_ast_from_blocks(
+        document: &crate::ProjectDoc,
+        block_id: &crate::Id,
+    ) -> Result<Self, Self::AstParseErr>
+    where
+        Self: Sized,
+    {
+        todo!()
+    }
+}
+
+#[derive(Debug, thiserror::Error, PartialEq)]
+pub enum StmtNodeAstError {}
