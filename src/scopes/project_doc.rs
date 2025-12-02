@@ -8,6 +8,10 @@ use crate::{
     blocks::{BlockKindError, UnsupportedBlockKind},
 };
 
+#[derive(Debug, thiserror::Error)]
+#[error("The requested block id isn't associated with a valid block")]
+pub struct NoValidBlockForId;
+
 /// Represents an entire sb3 program file with all [`Target`]s,
 /// blocks ([`TargetBlocks`](crate::TargetBlocks)) and
 /// procedures ([`TargetProcedures`](crate::TargetProcedures))
@@ -70,5 +74,18 @@ impl ProjectDoc {
 
     pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (Id, ARc<str>)> {
         self.ids_with_blocks().sorted().unique()
+    }
+    /// Returns the _valid_ block with the given [`Id`] regardless in which target it's
+    /// stored. **Invalid or unsupported blocks can't be retreived with this**
+    pub fn get_block(
+        &self,
+        id: &crate::Id,
+    ) -> Result<crate::ARc<crate::BlockWrapper>, NoValidBlockForId> {
+        self.targets()
+            .iter()
+            .flat_map(|trgt| trgt.blocks().iter_blocks())
+            .find(|blk| blk.id() == id)
+            .cloned()
+            .ok_or(NoValidBlockForId)
     }
 }
