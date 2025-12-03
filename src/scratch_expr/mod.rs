@@ -1,6 +1,11 @@
 mod as_is_type;
+mod conversions;
 mod general_traits;
+mod quirk_sink;
 mod svalue;
+mod texts;
+
+pub use quirk_sink::{QuirkSink, ScopableQuirkSink};
 
 use crate::ARc;
 

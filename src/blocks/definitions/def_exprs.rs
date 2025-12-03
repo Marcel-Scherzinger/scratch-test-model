@@ -1,7 +1,7 @@
 use crate::attr::{ArgumentReporterName, DropdownSelection, Expression, List, Variable};
 
 super::define_blocks! {
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Clone)]
     pub enum ExprBlockKind (ExprBlockKindUnit):
 
     "argument_reporter_string_number" => ArgumentReporterStringNumber {

@@ -1,20 +1,38 @@
 macro_rules! def_dt_impl {
-    ($($type: ty : $name: literal $( { $($token: tt)+ } )?),* $(,)?) => {
+    ($($({$($generics:ident),+})? $type: ty : $name: literal $( { $($token: tt)+ } )?),* $(,)?) => {
         $(
-            impl crate::blocks::dt_interface::ValueAttrJsonElemtype for $type {
-                const ELEMTYPE: &'static str = $name;
-            }
-            $(
-                impl crate::blocks::dt_interface::ValueAttributeFromJson for $type {
-                    fn value_from_json(value: &serde_json::Value) -> Result<Self, FormatError>
-                    where
-                        Self: Sized,
-                    {
-                        crate::blocks::_macros::def_dt_impl!(;value; $($token)*)
-                    }
-                }
-            )?
+            $crate::blocks::_macros::def_dt_impl!{rule;$({$($generics),+})? $type : $name $( { $($token    )+ } )?}
         )*
+    };
+    (rule;{$generics:tt} $type: ty : $name: literal $( { $($token: tt)+ } )?) => {
+        impl<$generics> crate::blocks::dt_interface::ValueAttrJsonElemtype for $type {
+            const ELEMTYPE: &'static str = $name;
+        }
+        $(
+            impl<$generics> crate::blocks::dt_interface::ValueAttributeFromJson for $type {
+                fn value_from_json(value: &serde_json::Value) -> Result<Self, FormatError>
+                where
+                    Self: Sized,
+                {
+                    crate::blocks::_macros::def_dt_impl!(;value; $($token)*)
+                }
+            }
+        )?
+    };
+    (rule; $type: ty : $name: literal $( { $($token: tt)+ } )?) => {
+        impl crate::blocks::dt_interface::ValueAttrJsonElemtype for $type {
+            const ELEMTYPE: &'static str = $name;
+        }
+        $(
+            impl crate::blocks::dt_interface::ValueAttributeFromJson for $type {
+                fn value_from_json(value: &serde_json::Value) -> Result<Self, FormatError>
+                where
+                    Self: Sized,
+                {
+                    crate::blocks::_macros::def_dt_impl!(;value; $($token)*)
+                }
+            }
+        )?
     };
     (;$input: ident;|$value: ident| $block: block) => {
         (|$value| $block)($input)

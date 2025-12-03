@@ -1,25 +1,25 @@
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
 use super::error::TargetBlocksError;
 use crate::ext::{FromJsonExt, JsonCtxError};
 use crate::{
-    Id,
+    ARc, Id,
     blocks::{BlockKind, BlockKindError, UnsupportedBlockKind},
 };
 
 #[derive(Debug, PartialEq)]
 pub struct TargetBlocks {
-    valid: HashMap<Id, Rc<BlockWrapper>>,
-    invalid: HashMap<Id, Rc<JsonCtxError<BlockKindError>>>,
+    valid: HashMap<Id, ARc<BlockWrapper>>,
+    invalid: HashMap<Id, ARc<JsonCtxError<BlockKindError>>>,
 }
 
 impl TargetBlocks {
     /// All **valid** blocks (no unsupported or unknown blocks included)
-    pub fn iter_blocks(&self) -> impl Iterator<Item = &Rc<BlockWrapper>> {
+    pub fn iter_blocks(&self) -> impl Iterator<Item = &ARc<BlockWrapper>> {
         self.valid.values()
     }
     /// Get block by [`Id`]
-    pub fn get(&self, id: &Id) -> Option<&Rc<BlockWrapper>> {
+    pub fn get(&self, id: &Id) -> Option<&ARc<BlockWrapper>> {
         self.valid.get(id)
     }
     /// Iterator of all invalid blocks
@@ -30,13 +30,13 @@ impl TargetBlocks {
     ///   by this application
     /// - Blocks with an unknown
     ///   [opcode name](https://en.scratch-wiki.info/wiki/List_of_Block_Opcodes)
-    pub fn iter_invalid(&self) -> impl Iterator<Item = (&Id, &Rc<JsonCtxError<BlockKindError>>)> {
+    pub fn iter_invalid(&self) -> impl Iterator<Item = (&Id, &ARc<JsonCtxError<BlockKindError>>)> {
         self.invalid.iter()
     }
     /// Iterator of [`Id`]s and
     /// [opcode names](https://en.scratch-wiki.info/wiki/List_of_Block_Opcodes)
     /// of invalid blocks that are unknown by the application
-    pub fn iter_unknown_blocks(&self) -> impl Iterator<Item = (&Id, &Rc<str>)> {
+    pub fn iter_unknown_blocks(&self) -> impl Iterator<Item = (&Id, &ARc<str>)> {
         self.iter_invalid().filter_map(|(id, e)| {
             if let BlockKindError::UnknownBlock(n) = e.error() {
                 Some((id, n))
@@ -59,7 +59,7 @@ impl TargetBlocks {
     }
     /// Iterator of [`Id`]s and [opcode names](https://en.scratch-wiki.info/wiki/List_of_Block_Opcodes)
     /// of valid and invalid blocks
-    pub fn ids_with_blocks(&self) -> impl Iterator<Item = (Id, Rc<str>)> {
+    pub fn ids_with_blocks(&self) -> impl Iterator<Item = (Id, ARc<str>)> {
         use crate::blocks::GetOpcodeUnit;
         self.valid
             .iter()
@@ -86,7 +86,7 @@ impl crate::ext::FromJsonExt<Self, TargetBlocksError> for TargetBlocks {
                 let id: Id = id.clone().into();
                 match BlockWrapper::from_json_with_ctx(id.clone(), obj) {
                     Ok(b) => Ok((id, b.into())),
-                    Err(error) => Err((id, Rc::new(error))),
+                    Err(error) => Err((id, ARc::new(error))),
                 }
             })
             .partition(|r| r.is_ok());

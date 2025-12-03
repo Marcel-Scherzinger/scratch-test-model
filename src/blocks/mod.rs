@@ -13,14 +13,14 @@ use parsing::parse_kind;
 
 #[allow(unused)]
 pub use definitions::{
-    BlockKind, CmpBlockKind, EventBlockKind, ExprBlockKind, NoopStmtBlockKind, StmtBlockKind,
-    UnsupportedBlockKind,
+    BlockKind, CmpBlockKind, EventBlockKind, ExprBlockKind, ExprOrCmpBlockKind, NoopStmtBlockKind,
+    StmtBlockKind, UnsupportedBlockKind,
 };
 
 #[allow(unused)]
 pub use definitions::{
-    BlockKindUnit, CmpBlockKindUnit, EventBlockKindUnit, ExprBlockKindUnit, NoopStmtBlockKindUnit,
-    StmtBlockKindUnit, UnsupportedBlockKindUnit,
+    BlockKindUnit, CmpBlockKindUnit, EventBlockKindUnit, ExprBlockKindUnit, ExprOrCmpBlockKindUnit,
+    NoopStmtBlockKindUnit, StmtBlockKindUnit, UnsupportedBlockKindUnit,
 };
 
 pub use error::{BlockAttrError, BlockKindError};

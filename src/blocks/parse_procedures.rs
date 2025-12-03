@@ -4,6 +4,7 @@ use super::definitions::BlockKind;
 use crate::attr::{Expression, ProcedureArgumentDef, RefBlock};
 use crate::blocks::dt_interface::ValueAttributeFromJson;
 use crate::error::{BlockAttrError, BlockKindError};
+use crate::interpret_json as ij;
 use crate::{Id, StmtBlockKind, VariableValue};
 
 macro_rules! get_procedures_json {
@@ -100,20 +101,21 @@ pub(super) fn parse_procedures_prototype(
     let ids = get_procedures_json!(mutation, "argumentids")?;
     let names = get_procedures_json!(mutation, "argumentnames")?;
 
-    let argument_inputs: Result<HashMap<RefBlock, RefBlock>, BlockAttrError> = inputs
-        .iter()
-        .map(|(key, value)| {
-            let value = crate::interpret_json::get_block_ref(value).map_err(|error| {
-                crate::blocks::BlockAttrError::Invalid {
-                    treated_as: stringify! {$elemtype},
-                    attr_name: "procedures-argument".into(),
-                    source: "inputs",
-                    error,
-                }
-            })?;
-            Ok((key.clone().into(), value))
-        })
-        .collect();
+    let argument_inputs: Result<HashMap<RefBlock<BlockKind>, RefBlock<BlockKind>>, BlockAttrError> =
+        inputs
+            .iter()
+            .map(|(key, value)| {
+                let value = ij::RefBlock::parse_from_json(value).map_err(|error| {
+                    crate::blocks::BlockAttrError::Invalid {
+                        treated_as: stringify! {$elemtype},
+                        attr_name: "procedures-argument".into(),
+                        source: "inputs",
+                        error,
+                    }
+                })?;
+                Ok((key.clone().into(), value))
+            })
+            .collect();
     let argument_inputs = argument_inputs?;
 
     let proccode = mutation["proccode"]
