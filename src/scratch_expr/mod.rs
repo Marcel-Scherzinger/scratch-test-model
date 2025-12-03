@@ -5,7 +5,7 @@ mod quirk_sink;
 mod svalue;
 mod texts;
 
-pub use quirk_sink::QuirkSink;
+pub use quirk_sink::{QuirkSink, ScopableQuirkSink};
 
 use crate::ARc;
 
