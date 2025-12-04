@@ -21,6 +21,6 @@ on control structures, input, output, variables and lists.
   The usage of parallelism in a file can lead to the interpreter rejecting it.
   _(Just stick to a single green-flag event and you're fine.)_
 - Scratch often tries to do _something_ to avoid exceptions or fatal errors.
-  Some expressions don't evaluate to a value programmers would be expect based on their
+  Some expressions don't evaluate to a value programmers would expect based on their
   knowledge from other languages. This project tries to model them but there is still a
   chance of differences in behaviour, especially when it comes to numbers.

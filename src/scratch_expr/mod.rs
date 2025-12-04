@@ -1,3 +1,4 @@
+mod arithmetic;
 mod as_is_type;
 mod conversions;
 mod general_traits;
@@ -9,6 +10,16 @@ pub use conversions::{SValueToBoolQ, SValueToFloatQ, SValueToIntQ};
 pub use quirk_sink::{QuirkSink, ScopableQuirkSink};
 
 use crate::ARc;
+
+/// Only used in a few amount of cases where it is clear that neither booleans nor
+/// texts can occur
+#[derive(derive_more::Debug, Clone, derive_more::Display, PartialEq)]
+pub enum SNumber {
+    #[debug("{_0:?}")]
+    Int(i64),
+    #[debug("{_0:?}")]
+    Float(f64),
+}
 
 /// This should model a Scratch value.
 /// Scratch treats texts that are non-numeric as the number `0` and also stores numbers
