@@ -5,6 +5,7 @@ mod quirk_sink;
 mod svalue;
 mod texts;
 
+pub use conversions::{SValueToBoolQ, SValueToFloatQ, SValueToIntQ};
 pub use quirk_sink::{QuirkSink, ScopableQuirkSink};
 
 use crate::ARc;

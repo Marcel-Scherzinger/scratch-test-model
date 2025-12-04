@@ -120,7 +120,7 @@ mod ext;
 mod interpret_json;
 mod reader;
 mod scopes;
-mod scratch_expr;
+pub mod scratch_expr;
 
 pub use blocks::GetOpcodeUnit;
 pub use blocks::{
