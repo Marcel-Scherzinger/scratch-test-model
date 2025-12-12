@@ -28,6 +28,17 @@ impl From<String> for SValue {
     }
 }
 
+/// This implementation is currently only used in tests
+/// so it is also annotated with `#[cfg(test)]`.
+///
+/// Maybe this will be added in normal code without the feature as well
+#[cfg(test)]
+impl<'a> From<&'a str> for SValue {
+    fn from(value: &'a str) -> Self {
+        Self::Text(value.into())
+    }
+}
+
 impl From<ARc<str>> for SValue {
     fn from(value: ARc<str>) -> Self {
         Self::Text(value)
