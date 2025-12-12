@@ -5,6 +5,10 @@ mod general_traits;
 mod quirk_sink;
 mod svalue;
 mod texts;
+mod utils;
+
+#[allow(unused)]
+pub(crate) use utils::{int2reprs, ints2reprs};
 
 pub use conversions::{SValueToBoolQ, SValueToFloatQ, SValueToIntQ};
 pub use quirk_sink::{QuirkSink, ScopableQuirkSink};
