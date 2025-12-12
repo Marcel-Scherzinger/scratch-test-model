@@ -1,5 +1,6 @@
 use super::{QuirkSink, SValue};
 
+#[allow(clippy::enum_variant_names)]
 pub enum NthLetterOfTextQ {
     PositionIsNotInt(SValue),
     PositionZero,
