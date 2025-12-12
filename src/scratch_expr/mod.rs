@@ -25,6 +25,13 @@ pub enum SNumber {
     Float(f64),
 }
 
+impl SNumber {
+    #[allow(unused)]
+    pub(crate) const NAN: Self = Self::Float(f64::NAN);
+    pub(crate) const INFINITY: Self = Self::Float(f64::INFINITY);
+    pub(crate) const NEG_INFINITY: Self = Self::Float(f64::NEG_INFINITY);
+}
+
 /// This should model a Scratch value.
 /// Scratch treats texts that are non-numeric as the number `0` and also stores numbers
 /// inside of arithmetic expressions as texts, at least sometimes.
@@ -41,6 +48,13 @@ pub enum SValue {
     Float(f64),
     #[debug("{_0:?}")]
     Bool(bool),
+}
+
+
+impl SValue {
+    pub(crate) const NAN: Self = Self::Float(f64::NAN);
+    pub(crate) const INFINITY: Self = Self::Float(f64::INFINITY);
+    pub(crate) const NEG_INFINITY: Self = Self::Float(f64::NEG_INFINITY);
 }
 
 #[derive(Debug, thiserror::Error, PartialEq)]
