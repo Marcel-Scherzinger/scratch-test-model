@@ -1,6 +1,15 @@
 use std::borrow::Cow;
 
-use crate::SValue;
+use crate::{SValue, scratch_expr::SNumber};
+
+impl SNumber {
+    pub(crate) const fn svalue(self) -> SValue {
+        match self {
+            Self::Int(i) => SValue::Int(i),
+            Self::Float(f) => SValue::Float(f),
+        }
+    }
+}
 
 impl SValue {
     pub fn is_float(&self) -> bool {
