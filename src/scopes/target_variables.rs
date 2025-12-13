@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use super::error::TargetVariablesError;
-use crate::scratch_expr::SValue as VariableValue;
+use svalue::SValue as VariableValue;
 
 use crate::{Id, interpret_json::Variable};
 
@@ -43,7 +43,7 @@ fn parse_variable(id: Id, def: &serde_json::Value) -> Option<(Variable, Variable
     let name = def[0].as_str()?.into();
     let initial = if let Some(num) = def[1].as_number() {
         // TODO: integer out of range case is ignored
-        VariableValue::try_from(num.clone()).ok()?
+        VariableValue::from(num.clone())
     } else if let Some(boo) = def[1].as_bool() {
         VariableValue::Bool(boo)
     } else if let Some(tex) = def[1].as_str() {

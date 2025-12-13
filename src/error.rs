@@ -5,7 +5,6 @@ pub use crate::interpret_json::FormatError;
 pub use crate::scopes::error::{
     TargetBlocksError, TargetError, TargetListsError, TargetVariablesError,
 };
-pub use crate::scratch_expr::IntegerOutOfBounds;
 
 #[allow(unused)]
 pub use crate::blocks::{BlockAttrError, BlockKindError};

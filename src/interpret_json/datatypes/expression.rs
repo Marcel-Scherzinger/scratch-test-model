@@ -2,7 +2,7 @@ use super::get_maybe_number;
 use super::{FormatError, List, OpcodeNum, RefBlock, Variable, get_opcode};
 
 use crate::ExprOrCmpBlockKind;
-use crate::scratch_expr::SValue;
+use svalue::SValue;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {

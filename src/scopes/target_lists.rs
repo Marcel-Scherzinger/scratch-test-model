@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::error::TargetListsError;
 use crate::interpret_json::List;
-use crate::scratch_expr::SValue as VariableValue;
+use svalue::SValue as VariableValue;
 
 use crate::Id;
 
@@ -43,11 +43,7 @@ fn parse_list(id: Id, def: &serde_json::Value) -> Option<(List, Vec<VariableValu
     let initial = if let Some(arr) = def[1].as_array() {
         arr.iter()
             .map(|element| {
-                if let Some(number) = element
-                    .as_number()
-                    .cloned()
-                    .and_then(|x| VariableValue::try_from(x).ok())
-                {
+                if let Some(number) = element.as_number().cloned().map(VariableValue::from) {
                     return number;
                 }
                 let text = element

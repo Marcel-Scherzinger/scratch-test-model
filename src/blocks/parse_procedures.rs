@@ -153,7 +153,7 @@ pub(super) fn parse_procedures_prototype(
                 ))?
                 .into();
             let default_value = if let Some(num) = default.as_number() {
-                VariableValue::try_from(num.clone())?
+                VariableValue::from(num.clone())
             } else {
                 VariableValue::Text(
                     default

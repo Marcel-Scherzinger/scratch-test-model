@@ -112,7 +112,6 @@
 /// copied from [<https://github.com/scratchfoundation/scratch-vm/blob/develop/src/serialization/sb3.js>]
 pub mod constants;
 
-mod a_rc_string;
 mod ast;
 mod blocks;
 pub mod error;
@@ -120,7 +119,6 @@ mod ext;
 mod interpret_json;
 mod reader;
 mod scopes;
-pub mod scratch_expr;
 
 pub use blocks::GetOpcodeUnit;
 pub use blocks::{
@@ -141,7 +139,7 @@ pub use interpret_json::OpcodeNum;
 pub use error::{DocError, Error};
 pub use reader::json_from_sb3_stream;
 pub use scopes::*;
-pub use scratch_expr::{SValue, SValue as VariableValue};
+pub use svalue::{SValue, SValue as VariableValue};
 
 pub mod attr {
     pub use crate::interpret_json::{
@@ -149,4 +147,4 @@ pub mod attr {
         Variable,
     };
 }
-pub use a_rc_string::ARc;
+pub use svalue::ARc;

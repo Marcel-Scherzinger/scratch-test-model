@@ -1,15 +1,11 @@
 use super::CmpUsingDisplay;
 use crate::{
     attr::{List, Variable},
-    error::IntegerOutOfBounds,
     interpret_json::{OpcodeNum, data_error::DataEntityFormatError},
 };
 
 #[derive(Debug, thiserror::Error, PartialEq)]
 pub enum FormatError {
-    /// A read number is too big
-    #[error("{0}")]
-    IntegerBounds(IntegerOutOfBounds),
     #[error("unable to parse number")]
     NoNumber,
     #[error("opcode={opcode} is not allowed to have {value:?} as value")]

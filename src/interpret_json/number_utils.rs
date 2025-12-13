@@ -7,7 +7,7 @@ pub(super) fn get_maybe_number(
     val: &serde_json::Value,
 ) -> Result<SValue, FormatError> {
     if let Some(num) = val.as_number() {
-        SValue::try_from(num.clone())
+        Ok(SValue::from(num.clone()))
     } else if let Some(text) = val.as_str() {
         Ok(SValue::Text(text.into()))
     } else {
