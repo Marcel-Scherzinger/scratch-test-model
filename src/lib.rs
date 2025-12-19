@@ -1,30 +1,6 @@
 //! Model to parse the [`*.sb3` file format](https://en.scratch-wiki.info/wiki/Scratch_File_Format)
 //! of the [Scratch](https://scratch.mit.edu/) block-oriented programming language
 //!
-//! <table><tr>
-//!
-//! <td>
-//!
-//! [summary](../scratch_test/index.html)
-//!
-//! </td><td>
-//!
-//! [interpreter](../interpreter/index.html)
-//!
-//! </td><td>
-//!
-//! [scratch-yew](../scratch_yew/index.html)
-//!
-//! </td><td>
-//!
-//! [testreports](../testreports/index.html)
-//!
-//! </td><td>
-//!
-//! [testdata](../testdata/index.html)
-//!
-//! </td></tr></table>
-//!
 //! (I want to note that I was unable to find the above link to the format specification
 //! when I was developing this so I reverse-engineered the format from example files.
 //! Luckily, it looks like I correctly understood the meaning of the components.)

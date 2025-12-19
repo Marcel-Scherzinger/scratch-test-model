@@ -296,7 +296,7 @@ dependencies = [
 [[package]]
 name = "scratch-test-value"
 version = "0.1.0"
-source = "git+https://github.com/Marcel-Scherzinger/scratch-test-value#ceb36d11692b82eb0366575e2040056595a93cc5"
+source = "git+https://github.com/Marcel-Scherzinger/scratch-test-value#7968e4f3c91150db0ce5233102edee8e2bf5739d"
 dependencies = [
  "derive_more",
  "itertools",
