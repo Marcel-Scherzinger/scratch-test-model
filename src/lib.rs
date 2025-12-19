@@ -88,7 +88,6 @@
 /// copied from [<https://github.com/scratchfoundation/scratch-vm/blob/develop/src/serialization/sb3.js>]
 pub mod constants;
 
-mod ast;
 mod blocks;
 pub mod error;
 mod ext;
