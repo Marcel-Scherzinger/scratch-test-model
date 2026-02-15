@@ -1,65 +1,32 @@
-use std::collections::{BTreeSet, HashMap};
-
-use scratch_test_model::{ProjectDoc, UnsupportedBlockKind};
+use scratch_test_model::ProjectDoc;
 
 #[test]
 fn read_all_standard_blocks() {
-    let res = ProjectDoc::from_sb3_file("sb3/all-predefined-blocks.sb3").expect("valid document");
-
-    let doc = match res.ensure_no_invalid_blocks() {
-        Ok(doc) => {
-            let invalid: HashMap<_, _> = doc.invalid_blocks().collect();
-            panic!("document shouldn't be totally valid: {invalid:#?}\n{doc:#?}")
+    let json = scratch_test_model::json_from_sb3_file("sb3/all-predefined-blocks.sb3").unwrap();
+    let res = ProjectDoc::from_json(&json);
+    if let Some(err) = res.err() {
+        if let scratch_test_model::error::ModelError::Target(err) = err {
+            panic!("{:#?}", err.inner_error());
         }
-        Err(doc) => doc,
-    };
 
-    assert!(doc.invalid_blocks().next().is_some());
-
-    if doc.unknown_blocks().next().is_some() {
-        let unknown: HashMap<_, _> = doc.unknown_blocks().collect();
-        let ids: BTreeSet<_> = unknown.values().collect();
-
-        panic!("document shouldn't contain unknown blocks: {ids:#?}\n{unknown:#?}");
+        panic!("{err:#?}");
     }
-    use itertools::Itertools;
-
-    let sorted_expected = ALL_UNSUPPORTED_STD_BLOCKS
-        .iter()
-        .sorted()
-        .cloned()
-        .unique()
-        .collect_vec();
-    let sorted_found = doc
-        .unsupported_blocks()
-        .map(|(_, o)| o.clone())
-        .unique()
-        .sorted()
-        .collect_vec();
-
-    assert!(
-        sorted_found
-            .iter()
-            .contains(&&UnsupportedBlockKind::SensingTouchingcolor)
-    );
-    assert!(
-        sorted_found
-            .iter()
-            .contains(&&UnsupportedBlockKind::SensingLoudness)
-    );
-
-    for (a, b) in sorted_expected.iter().zip(&sorted_found) {
-        assert_eq!(a, b);
-    }
-
-    assert_eq!(sorted_expected, sorted_found);
-
-    assert_eq!(
-        75,
-        doc.unsupported_blocks().map(|(_, o)| o).unique().count()
-    )
 }
 
+#[test]
+fn read_custom_blocks() {
+    let json = scratch_test_model::json_from_sb3_file("sb3/my-blocks.sb3").unwrap();
+    let res = ProjectDoc::from_json(&json);
+    if let Some(err) = res.err() {
+        if let scratch_test_model::error::ModelError::Target(err) = err {
+            panic!("{:#?}", err.inner_error());
+        }
+
+        panic!("{err:#?}");
+    }
+}
+
+/*
 const ALL_UNSUPPORTED_STD_BLOCKS: [UnsupportedBlockKind; 75] = [
     UnsupportedBlockKind::EventWhenthisspriteclicked,
     UnsupportedBlockKind::EventBroadcast,
@@ -137,3 +104,4 @@ const ALL_UNSUPPORTED_STD_BLOCKS: [UnsupportedBlockKind; 75] = [
     UnsupportedBlockKind::SensingTouchingobjectmenu,
     UnsupportedBlockKind::SensingUsername,
 ];
+*/

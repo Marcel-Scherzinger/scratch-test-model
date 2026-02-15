@@ -3,46 +3,23 @@
 //!
 //! (I want to note that I was unable to find the above link to the format specification
 //! when I was developing this so I reverse-engineered the format from example files.
-//! Luckily, it looks like I correctly understood the meaning of the components.)
+//! Luckily, it looks like I correctly understood the meaning of the components.
+//! This is the second version of the parser that supports all standard blocks
+//! and some extensions even blocks that aren't supported by the interpreter.)
 //!
 //!
 //! The program components extracted from a `*.sb3` file are represented by the
 //! [`ProjectDoc`] type which offers different methods for parsing a file or
 //! a sequence of bytes representing the file's content.
+//! The simplest is to first parse the document as json as this value
+//! will be borrowed internally.
 //!
 //! ```no_run
-//! # use scratch_test_model::ProjectDoc;
-//! let doc = ProjectDoc::from_sb3_file("/path/to/file.sb3");
+//! # use scratch_test_model::{ProjectDoc, json_from_sb3_file};
+//! let json = json_from_sb3_file("/path/to/file.sb3").unwrap();
+//! let doc = ProjectDoc::from_json(&json);
 //! println!("{doc:#?}");
 //! ```
-//!
-//! <div class="warning">
-//!
-//! This project doesn't aim to support all of scratch blocks and when the parsing functions
-//! encounter an unknown block or a block that is known to be unsupported those errors
-//! won't stop the parsing and will result in a valid document representation.
-//! Those invalid blocks are stored differently and may cause problems if
-//! the used virtual machine doesn't know how to handle a suddenly not available block.
-//!
-//! Use for example [`ProjectDoc::ensure_no_invalid_blocks`] on a parsed object to only
-//! allow completly usable blocks in the document.
-//!
-//! ```no_run
-//! # use scratch_test_model::ProjectDoc;
-//! let doc = ProjectDoc::from_sb3_file("/path/to/file.sb3").expect("valid document");
-//! println!("Maybe also contains invalid blocks {doc:#?}");
-//!
-//! match doc.ensure_no_invalid_blocks() {
-//!     Ok(doc) => {
-//!         println!("Totally valid: {doc:#?}");
-//!     }
-//!     Err(doc) => {
-//!         println!("There are invalid blocks, be extra careful: {doc:#?}");
-//!     }
-//! }
-//! ```
-//!
-//! </div>
 //!
 //! # Steps
 //!
@@ -52,9 +29,7 @@
 //! is a ZIP file with images, sounds, ... and a `project.json`
 //! that contains all information about the program structure.
 //!
-//! [`ProjectDoc`] offers associated functions for constructing a
-//! document from a ZIP file like [`ProjectDoc::from_sb3_file`].
-//! But if the used decompression algorithm is unable to read the file
+//! If the used decompression algorithm is unable to read the file
 //! or if you want to provide the `project.json` file directly
 //! you can use [`ProjectDoc::from_json`] which can be called with
 //! an already parsed JSON document.
@@ -85,41 +60,27 @@
 //!
 //! (See [`Target`] for details.)
 
-/// copied from [<https://github.com/scratchfoundation/scratch-vm/blob/develop/src/serialization/sb3.js>]
-pub mod constants;
+#[allow(unused)]
+use scopes::{Target, TargetBlocks, TargetLists, TargetProcedures, TargetVariables};
 
-mod blocks;
+pub mod attrs;
+mod aux;
+pub mod blocks;
 pub mod error;
-mod ext;
-mod interpret_json;
 mod reader;
-mod scopes;
+pub mod scopes;
 
-pub use blocks::GetOpcodeUnit;
-pub use blocks::{
-    BlockKind, CmpBlockKind, EventBlockKind, ExprBlockKind, ExprOrCmpBlockKind, NoopStmtBlockKind,
-    StmtBlockKind, UnsupportedBlockKind,
-};
-
-pub mod block_opcodes {
-    pub use crate::blocks::{
-        BlockKindUnit, CmpBlockKindUnit, EventBlockKindUnit, ExprBlockKindUnit,
-        ExprOrCmpBlockKindUnit, NoopStmtBlockKindUnit, StmtBlockKindUnit, UnsupportedBlockKindUnit,
-    };
-}
-
-pub type Id = crate::ARc<str>;
-pub use interpret_json::OpcodeNum;
-
-pub use error::{DocError, Error};
+pub use reader::json_from_sb3_file;
 pub use reader::json_from_sb3_stream;
-pub use scopes::*;
-pub use svalue::{SValue, SValue as VariableValue};
+pub use scopes::ProjectDoc;
+pub type Id = svalue::ARc<str>;
 
-pub mod attr {
-    pub use crate::interpret_json::{
-        ArgumentReporterName, DropdownSelection, Expression, List, ProcedureArgumentDef, RefBlock,
-        Variable,
-    };
+/// everything that the proc-macro needs to reference is here
+#[allow(unused)]
+mod _exports {
+    pub use crate::aux::AttrLocation;
+    pub(crate) use crate::aux::errors::BlockKindError;
+    pub use crate::aux::opcode_trait::{AsOpcodeName, AsOpcodeUnit};
+    pub(crate) use crate::aux::parse_attr::helper_attr_access;
+    pub(crate) use crate::aux::parse_block::{BlockProperties, JsonBlocks, ParseJsonBlock};
 }
-pub use svalue::ARc;

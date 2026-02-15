@@ -1,6 +1,6 @@
 use itertools::Itertools;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use scratch_test_model::ProjectDoc;
+use scratch_test_model::{ProjectDoc, json_from_sb3_file};
 
 fn parse_in_folder(folder: &str) {
     let walker = walkdir::WalkDir::new(folder).into_iter();
@@ -13,7 +13,8 @@ fn parse_in_folder(folder: &str) {
                 && file.path().extension().and_then(|s| s.to_str()) == Some("sb3")
         })
         .map(|file| {
-            ProjectDoc::from_sb3_file(file.path())
+            let json = json_from_sb3_file(file.path()).unwrap();
+            ProjectDoc::from_json(&json)
                 .map(|_| ())
                 .map_err(|err| (file.path().to_owned(), format!("{err:#?}")))
                 .err()
