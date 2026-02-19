@@ -8,7 +8,7 @@ is used by many institutions to teach beginners how programming concepts work.
 The `scratch-test` project is planned as a way to unit-test submissions of
 learners for defined exercises.
 
-This repository contains the `model` for parsing Scratch files.
+This repository contains the model for parsing Scratch files.
 Other crates like the interpreter build on top of it.
 
 # Limitations
@@ -16,9 +16,10 @@ Other crates like the interpreter build on top of it.
 This project is assumed to be used for **algorithmic exercises**, so the focus is
 on control structures, input, output, variables and lists.
 
-- Sounds, movements, colors, etc. are not planned.
+- Sounds, movements, colors, etc. are not planned for most components,
+  but the block information about them is parsed.
 - As Scratch gives *no guarantees* about the execution order of parallel programs
-  this project disallows them completly.
+  this project disallows them completly (affects only interpreter).
   The usage of parallelism in a file can lead to the interpreter rejecting it.
   _(Just stick to a single green-flag event and you're fine.)_
 - Scratch often tries to do _something_ to avoid exceptions or fatal errors.
