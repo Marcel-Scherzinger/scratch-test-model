@@ -58,22 +58,22 @@ pub enum SensingKeyoptionsMenu {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct SoundSounds(svalue::ARc<str>);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct LooksCostume(svalue::ARc<str>);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct ChooseClone(svalue::ARc<str>);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct SensingKeyoptions(svalue::ARc<str>);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct Text2SpeechVoices(svalue::ARc<str>);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct Text2SpeechLanguages(svalue::ARc<str>);
 
 #[derive(Block)]
