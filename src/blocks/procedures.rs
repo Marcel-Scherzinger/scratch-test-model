@@ -118,8 +118,11 @@ pub struct ProceduresPrototype {
     arguments: svalue::ARc<[ProcedureArgumentDef]>,
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::From, Clone)]
-pub struct ProcedureId(svalue::ARc<str>);
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, derive_getters::Getters, Clone)]
+pub struct ProcedureId {
+    proccode: svalue::ARc<str>,
+    procedure_id: svalue::ARc<str>,
+}
 
 impl ProcedureId {
     pub fn generate_from<'a>(
@@ -127,12 +130,13 @@ impl ProcedureId {
         argument_ids: impl Iterator<Item = &'a str>,
     ) -> Self {
         use itertools::Itertools;
-        Self(
-            std::iter::once(proccode)
+        Self {
+            procedure_id: std::iter::once(proccode)
                 .chain(argument_ids.sorted())
                 .join("|")
                 .into(),
-        )
+            proccode: proccode.into(),
+        }
     }
     pub fn generate_from_fields(
         proccode: &str,
