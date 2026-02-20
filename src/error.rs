@@ -7,6 +7,8 @@ use crate::{
     aux::JsonCtx,
 };
 
+pub use crate::scopes::project_doc::NoValidBlockForId;
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, thiserror::Error)]
 pub enum TargetDataError<Kind> {
     #[error("expected object {{...}} for data entities of target")]

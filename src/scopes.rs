@@ -1,5 +1,5 @@
 pub(crate) mod block_wrapper;
-mod project_doc;
+pub(crate) mod project_doc;
 mod target;
 mod target_blocks;
 mod target_data;
