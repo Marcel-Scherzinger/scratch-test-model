@@ -3,7 +3,7 @@ use crate::{
     aux::constants,
 };
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_getters::Getters)]
 pub struct Color {
     hex: svalue::ARc<str>,
 }
