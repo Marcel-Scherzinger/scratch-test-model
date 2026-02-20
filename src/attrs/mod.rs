@@ -11,6 +11,8 @@ pub use data::{List, Variable};
 
 pub use dropdowns::{AnyDropdownOf, DirectDropdownOf, DropdownMenuOf};
 
+pub use crate::scopes::block_wrapper::Position;
+
 use either::Either;
 pub use expression::Expression;
 pub(crate) use string_helper::StringAtArrayPosZero;

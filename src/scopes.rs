@@ -1,4 +1,4 @@
-mod block_wrapper;
+pub(crate) mod block_wrapper;
 mod project_doc;
 mod target;
 mod target_blocks;
