@@ -10,7 +10,10 @@ use crate::attrs::{
 pub enum EventBlockKind {
     EventWhenflagclicked,
     EventWhenthisspriteclicked,
-    EventWhenbackdropswitchesto,
+    EventWhenbackdropswitchesto {
+        #[block(location = fields)]
+        backdrop: DirectDropdownOf<svalue::ARc<str>>,
+    },
     EventWhenkeypressed {
         #[block(location = fields)]
         key_option: DirectDropdownOf<KeyboardKey>,
