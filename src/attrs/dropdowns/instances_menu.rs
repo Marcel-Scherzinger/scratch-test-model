@@ -40,6 +40,15 @@ pub enum MotionPointtowardsMenu {
         towards: StringAtArrayPosZero,
     },
 }
+
+#[derive(Block)]
+pub enum SensingDistancetoMenu {
+    #[block(opcode = "sensing_distancetomenu")]
+    SensingDistancetoMenu {
+        #[block(location = fields)]
+        distancetomenu: StringAtArrayPosZero,
+    },
+}
 #[derive(Block)]
 pub enum SensingKeyoptionsMenu {
     #[block(opcode = "sensing_keyoptions")]
@@ -97,6 +106,11 @@ pub struct SensingOfObject(svalue::ARc<str>);
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum MotionPointtowards {
+    Mouse,
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
+pub enum SensingDistanceto {
     Mouse,
 }
 
@@ -277,6 +291,23 @@ impl ExtraMenuDropdownParseStrat<MotionPointtowards> for MotionPointtowards {
         match towards.as_str() {
             "_mouse_" => Ok(Self::Mouse),
             _ => Err(towards.take()),
+        }
+    }
+}
+
+impl ExtraMenuDropdownParseStrat<SensingDistanceto> for SensingDistanceto {
+    const VALID_HINT: &'static str = "'_mouse_'";
+
+    type MenuBlock = SensingDistancetoMenu;
+
+    fn from_menu_block(block: Self::MenuBlock) -> Result<Self, String>
+    where
+        Self: Sized,
+    {
+        let SensingDistancetoMenu::SensingDistancetoMenu { distancetomenu } = block;
+        match distancetomenu.as_str() {
+            "_mouse_" => Ok(Self::Mouse),
+            _ => Err(distancetomenu.take()),
         }
     }
 }

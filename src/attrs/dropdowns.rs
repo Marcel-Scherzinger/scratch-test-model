@@ -7,6 +7,7 @@ mod instances_menu;
 pub use any_dropdown::AnyDropdownOf;
 pub use direct_dropdown::DirectDropdownOf;
 pub use dropdown_menu_of::DropdownMenuOf;
+use either::Either;
 pub use instances_direct::{
     ForwardBackward, GreaterThan, LooksEffect, LooksGotoFrontBack,
     LooksTargetNumbername as LooksBackdropnumbername,
@@ -15,11 +16,16 @@ pub use instances_direct::{
 };
 pub use instances_menu::{
     ChooseClone, LooksBackdrops, LooksCostume, MotionPointtowards, PenColorParam,
-    PossibleGlideToPos, PossibleGoToPos, SensingKeyoptions, SensingOfObject, SensingTouchingobject,
-    SoundSounds, Text2SpeechLanguages, Text2SpeechVoices,
+    PossibleGlideToPos, PossibleGoToPos, SensingDistanceto, SensingKeyoptions, SensingOfObject,
+    SensingTouchingobject, SoundSounds, Text2SpeechLanguages, Text2SpeechVoices,
 };
 
 use crate::_exports::AsOpcodeUnit;
+
+/// This indicates that only the block-/data-referencing variants are needed
+pub type ExpressionRef = Expression;
+pub type RoundDropdownMenuOf<T, S = T> = Either<DropdownMenuOf<T, S>, ExpressionRef>;
+pub type RoundDirectDropdownOf<T> = Either<DirectDropdownOf<T>, ExpressionRef>;
 
 macro_rules! construct_menu_arr {
     ($($ty: ident),* $(,)?) => {
@@ -35,7 +41,7 @@ macro_rules! construct_menu_arr {
     };
 }
 
-pub const META_DROPDOWN_MENUES: [&str; 13] = construct_menu_arr![
+pub const META_DROPDOWN_MENUES: [&str; 14] = construct_menu_arr![
     MotionPointtowardsMenu,
     SensingTouchingobjectmenu,
     SensingOfObjectMenu,
@@ -48,9 +54,11 @@ pub const META_DROPDOWN_MENUES: [&str; 13] = construct_menu_arr![
     SensingKeyoptionsMenu,
     PenColorParamMenu,
     Text2SpeechVoicesMenu,
-    Text2SpeechLanguagesMenu
+    Text2SpeechLanguagesMenu,
+    SensingDistancetoMenu,
 ];
 
+use crate::attrs::Expression;
 use crate::attrs::dropdowns::direct_dropdown::FromDirectDropdownString;
 
 impl FromDirectDropdownString for svalue::ARc<str> {

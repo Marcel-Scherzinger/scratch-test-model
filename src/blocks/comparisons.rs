@@ -1,7 +1,8 @@
 use scratch_test_model_proc::Block;
 
 use crate::attrs::{
-    ArgumentReporterName, Color, DirectDropdownOf, DropdownMenuOf, Expression, List, RefBlock,
+    ArgumentReporterName, Color, DirectDropdownOf, Expression, ExpressionRef, List, RefBlock,
+    RoundDropdownMenuOf,
     dropdowns::{SensingKeyoptions, SensingTouchingobject},
 };
 
@@ -50,19 +51,19 @@ pub enum CmpBlockKind {
 
     SensingTouchingobject {
         #[block(json_name = "TOUCHINGOBJECTMENU")]
-        object: DropdownMenuOf<SensingTouchingobject>,
+        object: RoundDropdownMenuOf<SensingTouchingobject>,
     },
 
     SensingMousedown,
     SensingTouchingcolor {
-        color: Color,
+        color: either::Either<Color, ExpressionRef>,
     },
     SensingKeypressed {
-        key_option: DropdownMenuOf<SensingKeyoptions>,
+        key_option: RoundDropdownMenuOf<SensingKeyoptions>,
     },
     SensingColoristouchingcolor {
-        color: Color,
-        color2: Color,
+        color: either::Either<Color, ExpressionRef>,
+        color2: either::Either<Color, ExpressionRef>,
     },
     SensingKeyoptions {
         #[block(location = fields)]

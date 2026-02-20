@@ -39,6 +39,12 @@ pub enum AttributeContentError<'a> {
     #[debug("{_0:?}")]
     Other(&'static str),
 
+    #[error("'Either' attribute failed twice: first={first_err}, second={second_err}")]
+    BothEitherFailed {
+        first_err: Box<AttributeContentError<'a>>,
+        second_err: Box<AttributeContentError<'a>>,
+    },
+
     #[error("expected an array (fixed-len={specified_length:?}): {value}")]
     ExpectedArray {
         value: &'a serde_json::Value,

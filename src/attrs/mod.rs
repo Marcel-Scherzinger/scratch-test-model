@@ -11,6 +11,7 @@ pub use data::{List, Variable};
 
 pub use dropdowns::{AnyDropdownOf, DirectDropdownOf, DropdownMenuOf};
 
+use either::Either;
 pub use expression::Expression;
 pub(crate) use string_helper::StringAtArrayPosZero;
 
@@ -19,6 +20,8 @@ pub use broadcast_id::BroadcastId;
 use crate::attrs::string_helper::OnlyString;
 pub use crate::aux::errors::{AttributeContentError, AttributeParseError};
 pub(crate) use crate::aux::parse_attr::ParseJsonBlockAttribute;
+
+pub use dropdowns::{ExpressionRef, RoundDirectDropdownOf, RoundDropdownMenuOf};
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ArgumentReporterName(StringAtArrayPosZero);
@@ -36,6 +39,40 @@ impl ParseJsonBlockAttribute for ArgumentReporterName {
             attribute_value,
         )
         .map(Self)
+    }
+}
+
+impl<FirstTry, SecondTry> ParseJsonBlockAttribute for Either<FirstTry, SecondTry>
+where
+    FirstTry: ParseJsonBlockAttribute,
+    SecondTry: ParseJsonBlockAttribute,
+{
+    fn parse_json_block_attr_without_expecting_shadow<'a>(
+        all_target_blocks: crate::_exports::JsonBlocks<'a>,
+        attribute_value: &'a serde_json::Value,
+    ) -> Result<Self, crate::aux::errors::AttributeContentError<'a>>
+    where
+        Self: Sized,
+    {
+        let first = FirstTry::parse_json_block_attr_without_expecting_shadow(
+            all_target_blocks,
+            attribute_value,
+        )
+        .map(Self::Left);
+        match first {
+            Ok(f) => Ok(f),
+            Err(first_err) => {
+                let second = SecondTry::parse_json_block_attr_without_expecting_shadow(
+                    all_target_blocks,
+                    attribute_value,
+                )
+                .map(Self::Right);
+                second.map_err(|second_err| AttributeContentError::BothEitherFailed {
+                    first_err: Box::new(first_err),
+                    second_err: Box::new(second_err),
+                })
+            }
+        }
     }
 }
 

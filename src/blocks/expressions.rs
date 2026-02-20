@@ -1,8 +1,8 @@
 use crate::attrs::{
-    ArgumentReporterName, DirectDropdownOf, DropdownMenuOf, Expression, List,
+    ArgumentReporterName, DirectDropdownOf, Expression, List, RoundDropdownMenuOf,
     dropdowns::{
         LooksBackdropnumbername, LooksCostumenumbername, OperatorMathop, SensingCurrent,
-        SensingOfObject, SensingOfProperty,
+        SensingDistanceto, SensingOfObject, SensingOfProperty,
     },
 };
 use scratch_test_model_proc::Block;
@@ -84,7 +84,7 @@ pub enum ExprBlockKind {
     SensingOf {
         #[block(location = fields)]
         property: DirectDropdownOf<SensingOfProperty>,
-        object: DropdownMenuOf<SensingOfObject>,
+        object: RoundDropdownMenuOf<SensingOfObject>,
     },
     SensingCurrent {
         #[block(location = fields)]
@@ -106,6 +106,10 @@ pub enum ExprBlockKind {
     MotionIfonedgebounce,
     SoundVolume,
     MotionXposition,
+
+    SensingDistanceto {
+        distancetomenu: RoundDropdownMenuOf<SensingDistanceto>,
+    },
 
     /// ```
     /// # use scratch_test_model::blocks::ExprBlockKindUnit;

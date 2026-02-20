@@ -341,6 +341,7 @@ dependencies = [
  "const-str",
  "derive-getters",
  "derive_more",
+ "either",
  "itertools",
  "log",
  "ouroboros",

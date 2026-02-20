@@ -15,6 +15,7 @@ itertools = "0.14.0"
 
 scratch-test-model-proc = { path = "./scratch-test-model-proc" }
 ouroboros = "0.18.5"
+either = "1.15.0"
 
 [dependencies.svalue]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-value"

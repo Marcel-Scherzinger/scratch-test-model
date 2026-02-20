@@ -5,8 +5,8 @@ use scratch_test_model_proc::Block;
 use super::procedures::procedures_call;
 use crate::{
     attrs::{
-        BroadcastId, Color, DirectDropdownOf, DropdownMenuOf, Expression, List,
-        ProcedureArgumentId, RefBlock, Variable,
+        BroadcastId, Color, DirectDropdownOf, DropdownMenuOf, Expression, ExpressionRef, List,
+        ProcedureArgumentId, RefBlock, RoundDropdownMenuOf, Variable,
         dropdowns::{
             ChooseClone, ForwardBackward, LooksBackdrops, LooksCostume, LooksEffect,
             LooksGotoFrontBack, MotionPointtowards, MotionRotationstyle, PenColorParam,
@@ -109,7 +109,7 @@ pub enum StmtBlockKind {
 
     MotionGlideto {
         secs: Expression,
-        to: DropdownMenuOf<PossibleGlideToPos, PossibleGlideToPos>,
+        to: RoundDropdownMenuOf<PossibleGlideToPos>,
     },
 
     LooksChangeeffectby {
@@ -124,11 +124,11 @@ pub enum StmtBlockKind {
     ControlDeleteThisClone,
 
     LooksSwitchbackdropto {
-        backdrop: DropdownMenuOf<LooksBackdrops>,
+        backdrop: RoundDropdownMenuOf<LooksBackdrops>,
     },
 
     LooksSwitchcostumeto {
-        costume: DropdownMenuOf<LooksCostume>,
+        costume: RoundDropdownMenuOf<LooksCostume>,
     },
 
     MotionTurnleft {
@@ -144,7 +144,7 @@ pub enum StmtBlockKind {
         front_back: DirectDropdownOf<LooksGotoFrontBack>,
     },
     SoundPlayuntildone {
-        sound_menu: DropdownMenuOf<SoundSounds>,
+        sound_menu: RoundDropdownMenuOf<SoundSounds>,
     },
     SoundSetvolumeto {
         volume: Expression,
@@ -155,7 +155,7 @@ pub enum StmtBlockKind {
         y: Expression,
     },
     ControlCreateCloneOf {
-        clone_option: DropdownMenuOf<ChooseClone>,
+        clone_option: RoundDropdownMenuOf<ChooseClone>,
     },
     MotionSetx {
         x: Expression,
@@ -177,7 +177,7 @@ pub enum StmtBlockKind {
     },
     SoundCleareffects,
     SoundPlay {
-        sound_menu: DropdownMenuOf<SoundSounds>,
+        sound_menu: RoundDropdownMenuOf<SoundSounds>,
     },
     DataShowlist {
         #[block(location = fields)]
@@ -197,7 +197,7 @@ pub enum StmtBlockKind {
     },
     LooksShow,
     MotionPointtowards {
-        towards: DropdownMenuOf<MotionPointtowards>,
+        towards: RoundDropdownMenuOf<MotionPointtowards>,
     },
     SoundChangevolumeby {
         volume: Expression,
@@ -216,7 +216,7 @@ pub enum StmtBlockKind {
         degrees: Expression,
     },
     MotionGoto {
-        to: DropdownMenuOf<PossibleGoToPos>,
+        to: RoundDropdownMenuOf<PossibleGoToPos>,
     },
     LooksNextcostume,
     LooksNextbackdrop,
@@ -247,12 +247,15 @@ pub enum StmtBlockKind {
     EventBroadcastandwait {
         broadcast_input: BroadcastId,
     },
+    EventBroadcast {
+        broadcast_input: BroadcastId,
+    },
 
     PenClear,
     PenStamp,
     #[block(opcode = "pen_setPenColorToColor")]
     PenSetPenColorToColor {
-        color: Color,
+        color: either::Either<Color, ExpressionRef>,
     },
     #[block(opcode = "pen_changePenColorParamBy")]
     PenChangePenColorParamBy {

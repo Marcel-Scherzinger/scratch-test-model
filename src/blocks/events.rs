@@ -25,7 +25,4 @@ pub enum EventBlockKind {
         #[block(location = fields, json_name = "WHENGREATERTHANMENU")]
         category: DirectDropdownOf<GreaterThan>,
     },
-    EventBroadcast {
-        broadcast_input: BroadcastId,
-    },
 }
