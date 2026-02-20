@@ -6,7 +6,7 @@ mod expressions;
 mod procedures;
 mod statements;
 
-pub(crate) use procedures::{ProcedureArgumentDef, ProcedureId};
+pub use procedures::{ProcedureArgumentDef, ProcedureId};
 
 pub use crate::scopes::block_wrapper::BlockWrapper;
 
