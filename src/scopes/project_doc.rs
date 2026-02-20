@@ -34,13 +34,21 @@ impl ProjectDoc {
     pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (Id, BlockKindUnit)> {
         self.ids_with_opcodes().sorted().unique()
     }
+    /*
     /// Returns the block with the given [`Id`] regardless in which target it's stored.
-    pub fn get_block(&self, id: &crate::Id) -> Result<ARc<BlockWrapper>, NoValidBlockForId> {
+    pub fn get_block_owned(&self, id: &crate::Id) -> Result<ARc<BlockWrapper>, NoValidBlockForId> {
+        self.get_block(id).cloned()
+    }
+    */
+    /// Returns the block with the given [`Id`] regardless in which target it's stored.
+    pub fn get_block<'a>(
+        &'a self,
+        id: &crate::Id,
+    ) -> Result<&'a ARc<BlockWrapper>, NoValidBlockForId> {
         self.targets()
             .iter()
             .flat_map(|trgt| trgt.blocks().iter_blocks())
             .find(|blk| blk.id() == id)
-            .cloned()
             .ok_or(NoValidBlockForId)
     }
 }
