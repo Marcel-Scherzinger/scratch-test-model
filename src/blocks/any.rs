@@ -3,7 +3,8 @@ use crate::{
     aux::{JsonBlocks, JsonCtx},
     blocks::{
         CmpBlockKind, CmpBlockKindUnit, EventBlockKind, EventBlockKindUnit, ExprBlockKind,
-        ExprBlockKindUnit, StmtBlockKind, StmtBlockKindUnit,
+        ExprBlockKindUnit, ExprOrCmpBlockKind, ExprOrCmpBlockKindUnit, StmtBlockKind,
+        StmtBlockKindUnit,
         procedures::{ProceduresDefinition, ProceduresPrototype},
     },
 };
@@ -15,8 +16,7 @@ pub enum BlockKind {
     ProceduresPrototype(ProceduresPrototype),
 
     Event(EventBlockKind),
-    Cmp(CmpBlockKind),
-    Expr(ExprBlockKind),
+    ExprCmp(ExprOrCmpBlockKind),
     Stmt(StmtBlockKind),
 }
 
@@ -36,13 +36,32 @@ pub enum BlockKind {
 #[display("{_variant}")]
 pub enum BlockKindUnit {
     Event(EventBlockKindUnit),
-    Cmp(CmpBlockKindUnit),
-    Expr(ExprBlockKindUnit),
+    ExprCmp(ExprOrCmpBlockKindUnit),
     Stmt(StmtBlockKindUnit),
     #[display("procedures_prototype")]
     ProceduresPrototype,
     #[display("procedures_definition")]
     ProceduresDefinition,
+}
+impl From<ExprBlockKindUnit> for BlockKindUnit {
+    fn from(value: ExprBlockKindUnit) -> Self {
+        Self::ExprCmp(value.into())
+    }
+}
+impl From<CmpBlockKindUnit> for BlockKindUnit {
+    fn from(value: CmpBlockKindUnit) -> Self {
+        Self::ExprCmp(value.into())
+    }
+}
+impl From<ExprBlockKind> for BlockKind {
+    fn from(value: ExprBlockKind) -> Self {
+        Self::ExprCmp(value.into())
+    }
+}
+impl From<CmpBlockKind> for BlockKind {
+    fn from(value: CmpBlockKind) -> Self {
+        Self::ExprCmp(value.into())
+    }
 }
 
 impl AsOpcodeUnit for BlockKind {
@@ -50,9 +69,9 @@ impl AsOpcodeUnit for BlockKind {
 
     fn opcode(&self) -> Self::OpcodeUnit {
         match self {
-            Self::Expr(u) => u.opcode().into(),
+            Self::ExprCmp(ExprOrCmpBlockKind::Cmp(u)) => u.opcode().into(),
+            Self::ExprCmp(ExprOrCmpBlockKind::Expr(u)) => u.opcode().into(),
             Self::Event(u) => u.opcode().into(),
-            Self::Cmp(u) => u.opcode().into(),
             Self::Stmt(u) => u.opcode().into(),
             Self::ProceduresPrototype(_) => BlockKindUnit::ProceduresPrototype,
             Self::ProceduresDefinition(_) => BlockKindUnit::ProceduresDefinition,
