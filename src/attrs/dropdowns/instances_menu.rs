@@ -201,9 +201,6 @@ pub enum PossibleGlideToPos {
     Mouse,
 }
 impl ExtraMenuDropdownParseStrat<PossibleGlideToPos> for PossibleGlideToPos {
-    // const ATTRIBUTE_KEY: &'static str = "TO";
-    // const MENU_BLOCK_OPCODE: &'static str = "motion_glideto_menu";
-    // const DATA_LOCATION: crate::aux::AttrLocation = crate::aux::AttrLocation::Fields;
     const VALID_HINT: &'static str = "either '_mouse_' or '_random_'";
 
     type MenuBlock = MotionGlidetoMenu;
@@ -238,9 +235,6 @@ impl ExtraMenuDropdownParseStrat<PossibleGoToPos> for PossibleGoToPos {
     }
 }
 impl ExtraMenuDropdownParseStrat<LooksBackdrops> for LooksBackdrops {
-    // const ATTRIBUTE_KEY: &'static str = "BACKDROP";
-    // const MENU_BLOCK_OPCODE: &'static str = "looks_backdrops";
-    // const DATA_LOCATION: crate::aux::AttrLocation = crate::aux::AttrLocation::Fields;
     const VALID_HINT: &'static str = "'previous backdrop', 'next backdrop' or backdrop name";
 
     type MenuBlock = LooksBackdropsMenu;
@@ -259,9 +253,6 @@ impl ExtraMenuDropdownParseStrat<LooksBackdrops> for LooksBackdrops {
 }
 
 impl ExtraMenuDropdownParseStrat<SensingOfObject> for SensingOfObject {
-    // const ATTRIBUTE_KEY: &'static str = "OBJECT";
-    // const MENU_BLOCK_OPCODE: &'static str = "sensing_of_object_menu";
-    // const DATA_LOCATION: crate::aux::AttrLocation = crate::aux::AttrLocation::Fields;
     const VALID_HINT: &'static str = "unspecified value";
 
     type MenuBlock = SensingOfObjectMenu;
@@ -276,9 +267,6 @@ impl ExtraMenuDropdownParseStrat<SensingOfObject> for SensingOfObject {
 }
 
 impl ExtraMenuDropdownParseStrat<MotionPointtowards> for MotionPointtowards {
-    // const ATTRIBUTE_KEY: &'static str = "TOWARDS";
-    // const MENU_BLOCK_OPCODE: &'static str = "motion_pointtowards_menu";
-    // const DATA_LOCATION: crate::aux::AttrLocation = crate::aux::AttrLocation::Fields;
     const VALID_HINT: &'static str = "'_mouse_'";
 
     type MenuBlock = MotionPointtowardsMenu;
@@ -313,9 +301,6 @@ impl ExtraMenuDropdownParseStrat<SensingDistanceto> for SensingDistanceto {
 }
 
 impl ExtraMenuDropdownParseStrat<SensingTouchingobject> for SensingTouchingobject {
-    // const ATTRIBUTE_KEY: &'static str = "TOUCHINGOBJECTMENU";
-    // const MENU_BLOCK_OPCODE: &'static str = "sensing_touchingobjectmenu";
-    // const DATA_LOCATION: crate::aux::AttrLocation = crate::aux::AttrLocation::Fields;
     const VALID_HINT: &'static str = "either '_mouse_' or '_edge_'";
 
     type MenuBlock = SensingTouchingobjectmenu;

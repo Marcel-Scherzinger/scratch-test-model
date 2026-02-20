@@ -11,9 +11,6 @@ use crate::{
 /// It's meant as a separate strategy type so that one and the same value set
 /// can be parsed in multiple ways.
 pub trait ExtraMenuDropdownParseStrat<For> {
-    // const MENU_BLOCK_OPCODE: &'static str;
-    // const DATA_LOCATION: AttrLocation;
-    // const ATTRIBUTE_KEY: &'static str;
     const VALID_HINT: &'static str;
     type MenuBlock: ParseJsonBlock;
 

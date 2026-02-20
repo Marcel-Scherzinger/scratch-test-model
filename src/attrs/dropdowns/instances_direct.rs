@@ -132,7 +132,7 @@ pub enum OperatorMathop {
     Log,
 }
 impl FromDirectDropdownString for OperatorMathop {
-    const VALID_HINT: &'static str = ""; // TODO
+    const VALID_HINT: &'static str = "'e ^', 'abs', '10 ^', 'ceiling', 'floor', ...";
     fn from_direct_dropdown_string(val: &str) -> Option<Self> {
         Some(match val {
             "e ^" => Self::Exp,
@@ -155,7 +155,7 @@ impl FromDirectDropdownString for OperatorMathop {
 }
 
 impl FromDirectDropdownString for SensingCurrent {
-    const VALID_HINT: &'static str = ""; // TODO
+    const VALID_HINT: &'static str = "'MONTH', 'YEAR', 'DAYOFWEEK', ...";
     fn from_direct_dropdown_string(val: &str) -> Option<Self> {
         Some(match val {
             "MONTH" => Self::Month,
