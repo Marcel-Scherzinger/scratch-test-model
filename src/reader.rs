@@ -1,3 +1,4 @@
+#![allow(unused)]
 use std::io::Read;
 use std::path::Path;
 
@@ -5,6 +6,7 @@ use crate::aux::JsonCtx;
 use crate::error::{DocError, ModelError};
 use crate::scopes::{ProjectDoc, Target};
 
+#[cfg(feature = "sb3")]
 pub fn json_from_sb3_stream<R: Read, T: std::fmt::Display + Sized>(
     handle: &mut R,
     tag: Option<T>,
@@ -26,6 +28,7 @@ pub fn json_from_sb3_stream<R: Read, T: std::fmt::Display + Sized>(
         }
     }
 }
+#[cfg(feature = "sb3")]
 pub fn json_from_sb3_file<'a>(path: impl AsRef<Path> + 'a) -> Result<serde_json::Value, DocError> {
     // wrapper is generic and will be duplicated for every concrete type
     // while this implementation can be used for all of them
@@ -108,6 +111,7 @@ impl ProjectDoc {
         })
     }
 
+    #[cfg(feature = "sb3")]
     #[allow(unused)]
     // TODO: think about public API
     /// Read a sb3 file by [`Path`]
@@ -156,6 +160,7 @@ impl ProjectDoc {
         from_sb3_file_impl(path)
     }
 
+    #[cfg(feature = "sb3")]
     /// Read sb3 data as a stream from an instance of [`Read`]
     /// with a suffix string used for context in error logs
     ///
@@ -197,6 +202,7 @@ impl ProjectDoc {
             }
         }
     }
+    #[cfg(feature = "sb3")]
     #[allow(unused)]
     // TODO: think about public API
     /// Read sb3 data as a stream from an instance of [`Read`]
@@ -223,6 +229,7 @@ impl ProjectDoc {
     ) -> ReadResult {
         Self::_inner_from_sb3_stream(handle, &format!(" {tag}"))
     }
+    #[cfg(feature = "sb3")]
     #[allow(unused)]
     // TODO: think about public API
     /// Read sb3 data as a stream from an instance of [`Read`]

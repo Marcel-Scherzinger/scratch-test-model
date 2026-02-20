@@ -70,7 +70,9 @@ pub mod error;
 mod reader;
 pub mod scopes;
 
+#[cfg(feature = "sb3")]
 pub use reader::json_from_sb3_file;
+#[cfg(feature = "sb3")]
 pub use reader::json_from_sb3_stream;
 pub use scopes::ProjectDoc;
 pub type Id = svalue::ARc<str>;
