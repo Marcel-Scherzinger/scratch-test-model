@@ -20,40 +20,15 @@ use crate::{
 #[derive(Debug, PartialEq, Clone, Block)]
 #[block(default_location = inputs)]
 pub enum StmtBlockKind {
-    LooksSayforsecs {
-        message: Expression,
-        secs: Expression,
+    ControlCreateCloneOf {
+        clone_option: RoundDropdownMenuOf<ChooseClone>,
     },
-    LooksThink {
-        message: Expression,
-    },
-    LooksThinkforsecs {
-        message: Expression,
-        secs: Expression,
-    },
-    LooksSay {
-        message: Expression,
-    },
-
-    ControlWait {
-        duration: Expression,
-    },
-    ControlIf {
-        condition: Option<RefBlock<CmpBlockKind>>,
-        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
-    },
+    ControlDeleteThisClone,
     ControlForever {
         substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
-    ControlStop {
-        #[block(location = fields)]
-        stop_option: DirectDropdownOf<svalue::ARc<str>>,
-    },
-    ControlWaitUntil {
+    ControlIf {
         condition: Option<RefBlock<CmpBlockKind>>,
-    },
-    ControlRepeat {
-        times: Expression,
         substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
     ControlIfElse {
@@ -61,19 +36,52 @@ pub enum StmtBlockKind {
         substack: Option<RefBlock<Vec<StmtBlockKind>>>,
         substack2: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
+    ControlRepeat {
+        times: Expression,
+        substack: Option<RefBlock<Vec<StmtBlockKind>>>,
+    },
     ControlRepeatUntil {
         condition: Option<RefBlock<CmpBlockKind>>,
         substack: Option<RefBlock<Vec<StmtBlockKind>>>,
     },
+    ControlStartAsClone,
+    ControlStop {
+        #[block(location = fields)]
+        stop_option: DirectDropdownOf<svalue::ARc<str>>,
+    },
+    ControlWait {
+        duration: Expression,
+    },
+    ControlWaitUntil {
+        condition: Option<RefBlock<CmpBlockKind>>,
+    },
 
+    DataAddtolist {
+        #[block(location = fields)]
+        list: List,
+        item: Expression,
+    },
+    DataChangevariableby {
+        #[block(location = fields)]
+        variable: Variable,
+        value: Expression,
+    },
+    DataDeletealloflist {
+        #[block(location = fields)]
+        list: List,
+    },
     DataDeleteoflist {
         #[block(location = fields)]
         list: List,
         index: Expression,
     },
-    DataDeletealloflist {
+    DataHidelist {
         #[block(location = fields)]
         list: List,
+    },
+    DataHidevariable {
+        #[block(location = fields)]
+        variable: Variable,
     },
     DataInsertatlist {
         #[block(location = fields)]
@@ -87,29 +95,26 @@ pub enum StmtBlockKind {
         index: Expression,
         item: Expression,
     },
-    DataAddtolist {
-        #[block(location = fields)]
-        list: List,
-        item: Expression,
-    },
     DataSetvariableto {
         #[block(location = fields)]
         variable: Variable,
         value: Expression,
     },
-    DataChangevariableby {
+    DataShowlist {
+        #[block(location = fields)]
+        list: List,
+    },
+
+    DataShowvariable {
         #[block(location = fields)]
         variable: Variable,
-        value: Expression,
     },
 
-    SensingAskandwait {
-        question: Expression,
+    EventBroadcast {
+        broadcast_input: BroadcastId,
     },
-
-    MotionGlideto {
-        secs: Expression,
-        to: RoundDropdownMenuOf<PossibleGlideToPos>,
+    EventBroadcastandwait {
+        broadcast_input: BroadcastId,
     },
 
     LooksChangeeffectby {
@@ -117,20 +122,65 @@ pub enum StmtBlockKind {
         effect: DirectDropdownOf<LooksEffect>,
         change: Expression,
     },
-    SensingSetdragmode {
-        #[block(location = fields)]
-        drag_mode: DirectDropdownOf<SensingDragmode>,
+    LooksChangesizeby {
+        change: Expression,
     },
-    ControlDeleteThisClone,
-
+    LooksCleargraphiceffects,
+    LooksGoforwardbackwardlayers {
+        #[block(location = fields)]
+        forward_backward: DirectDropdownOf<ForwardBackward>,
+        num: Expression,
+    },
+    LooksGotofrontback {
+        #[block(location = fields)]
+        front_back: DirectDropdownOf<LooksGotoFrontBack>,
+    },
+    LooksHide,
+    LooksNextcostume,
+    LooksNextbackdrop,
+    LooksSay {
+        message: Expression,
+    },
+    LooksSayforsecs {
+        message: Expression,
+        secs: Expression,
+    },
+    LooksSetsizeto {
+        size: Expression,
+    },
+    LooksSeteffectto {
+        #[block(location = fields)]
+        effect: DirectDropdownOf<LooksEffect>,
+        value: Expression,
+    },
+    LooksShow,
     LooksSwitchbackdropto {
         backdrop: RoundDropdownMenuOf<LooksBackdrops>,
     },
-
     LooksSwitchcostumeto {
         costume: RoundDropdownMenuOf<LooksCostume>,
     },
+    LooksThink {
+        message: Expression,
+    },
+    LooksThinkforsecs {
+        message: Expression,
+        secs: Expression,
+    },
 
+    MotionPointtowards {
+        towards: RoundDropdownMenuOf<MotionPointtowards>,
+    },
+    MotionGotoxy {
+        x: Expression,
+        y: Expression,
+    },
+    MotionTurnright {
+        degrees: Expression,
+    },
+    MotionGoto {
+        to: RoundDropdownMenuOf<PossibleGoToPos>,
+    },
     MotionTurnleft {
         degrees: Expression,
     },
@@ -139,23 +189,10 @@ pub enum StmtBlockKind {
         #[block(location = fields)]
         style: DirectDropdownOf<MotionRotationstyle>,
     },
-    LooksGotofrontback {
-        #[block(location = fields)]
-        front_back: DirectDropdownOf<LooksGotoFrontBack>,
-    },
-    SoundPlayuntildone {
-        sound_menu: RoundDropdownMenuOf<SoundSounds>,
-    },
-    SoundSetvolumeto {
-        volume: Expression,
-    },
     MotionGlidesecstoxy {
         secs: Expression,
         x: Expression,
         y: Expression,
-    },
-    ControlCreateCloneOf {
-        clone_option: RoundDropdownMenuOf<ChooseClone>,
     },
     MotionSetx {
         x: Expression,
@@ -175,62 +212,24 @@ pub enum StmtBlockKind {
     MotionChangeyby {
         dy: Expression,
     },
-    SoundCleareffects,
-    SoundPlay {
-        sound_menu: RoundDropdownMenuOf<SoundSounds>,
+
+    MotionGlideto {
+        secs: Expression,
+        to: RoundDropdownMenuOf<PossibleGlideToPos>,
     },
-    DataShowlist {
+
+    SensingAskandwait {
+        question: Expression,
+    },
+
+    SensingSetdragmode {
         #[block(location = fields)]
-        list: List,
-    },
-    DataHidelist {
-        #[block(location = fields)]
-        list: List,
-    },
-    DataShowvariable {
-        #[block(location = fields)]
-        variable: Variable,
-    },
-    DataHidevariable {
-        #[block(location = fields)]
-        variable: Variable,
-    },
-    LooksShow,
-    MotionPointtowards {
-        towards: RoundDropdownMenuOf<MotionPointtowards>,
+        drag_mode: DirectDropdownOf<SensingDragmode>,
     },
     SoundChangevolumeby {
         volume: Expression,
     },
     SoundStopallsounds,
-    LooksGoforwardbackwardlayers {
-        #[block(location = fields)]
-        forward_backward: DirectDropdownOf<ForwardBackward>,
-        num: Expression,
-    },
-    MotionGotoxy {
-        x: Expression,
-        y: Expression,
-    },
-    MotionTurnright {
-        degrees: Expression,
-    },
-    MotionGoto {
-        to: RoundDropdownMenuOf<PossibleGoToPos>,
-    },
-    LooksNextcostume,
-    LooksNextbackdrop,
-    LooksHide,
-    ControlStartAsClone,
-    LooksSetsizeto {
-        size: Expression,
-    },
-    LooksSeteffectto {
-        #[block(location = fields)]
-        effect: DirectDropdownOf<LooksEffect>,
-        value: Expression,
-    },
-    LooksCleargraphiceffects,
     SoundChangeeffectby {
         #[block(location = fields)]
         effect: DirectDropdownOf<SoundEffect>,
@@ -241,14 +240,15 @@ pub enum StmtBlockKind {
         effect: DirectDropdownOf<SoundEffect>,
         value: Expression,
     },
-    LooksChangesizeby {
-        change: Expression,
+    SoundPlayuntildone {
+        sound_menu: RoundDropdownMenuOf<SoundSounds>,
     },
-    EventBroadcastandwait {
-        broadcast_input: BroadcastId,
+    SoundSetvolumeto {
+        volume: Expression,
     },
-    EventBroadcast {
-        broadcast_input: BroadcastId,
+    SoundCleareffects,
+    SoundPlay {
+        sound_menu: RoundDropdownMenuOf<SoundSounds>,
     },
 
     PenClear,

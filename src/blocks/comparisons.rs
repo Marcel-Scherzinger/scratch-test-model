@@ -22,9 +22,9 @@ pub enum CmpBlockKind {
         operand1: Option<RefBlock<CmpBlockKind>>,
         operand2: Option<RefBlock<CmpBlockKind>>,
     },
-    OperatorEquals {
-        operand1: Expression,
-        operand2: Expression,
+    OperatorNot {
+        /// reference to boolean expression that should be negated
+        operand: Option<RefBlock<CmpBlockKind>>,
     },
     OperatorGt {
         operand1: Expression,
@@ -34,13 +34,13 @@ pub enum CmpBlockKind {
         operand1: Expression,
         operand2: Expression,
     },
+    OperatorEquals {
+        operand1: Expression,
+        operand2: Expression,
+    },
     OperatorContains {
         string1: Expression,
         string2: Expression,
-    },
-    OperatorNot {
-        /// reference to boolean expression that should be negated
-        operand: Option<RefBlock<CmpBlockKind>>,
     },
 
     DataListcontainsitem {
@@ -49,18 +49,6 @@ pub enum CmpBlockKind {
         item: Expression,
     },
 
-    SensingTouchingobject {
-        #[block(json_name = "TOUCHINGOBJECTMENU")]
-        object: RoundDropdownMenuOf<SensingTouchingobject>,
-    },
-
-    SensingMousedown,
-    SensingTouchingcolor {
-        color: either::Either<Color, ExpressionRef>,
-    },
-    SensingKeypressed {
-        key_option: RoundDropdownMenuOf<SensingKeyoptions>,
-    },
     SensingColoristouchingcolor {
         color: either::Either<Color, ExpressionRef>,
         color2: either::Either<Color, ExpressionRef>,
@@ -69,5 +57,16 @@ pub enum CmpBlockKind {
         #[block(location = fields)]
         key_option: DirectDropdownOf<svalue::ARc<str>>,
     },
+    SensingKeypressed {
+        key_option: RoundDropdownMenuOf<SensingKeyoptions>,
+    },
     SensingLoudness,
+    SensingMousedown,
+    SensingTouchingobject {
+        #[block(json_name = "TOUCHINGOBJECTMENU")]
+        object: RoundDropdownMenuOf<SensingTouchingobject>,
+    },
+    SensingTouchingcolor {
+        color: either::Either<Color, ExpressionRef>,
+    },
 }
