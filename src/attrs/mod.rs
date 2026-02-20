@@ -88,6 +88,9 @@ impl<T> RefBlock<T> {
     pub fn o_id(&self) -> crate::Id {
         self.id.clone()
     }
+    pub fn id(&self) -> &crate::Id {
+        &self.id
+    }
 }
 
 impl<T> ParseJsonBlockAttribute for RefBlock<T> {
