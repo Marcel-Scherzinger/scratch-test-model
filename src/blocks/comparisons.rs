@@ -60,7 +60,6 @@ pub enum CmpBlockKind {
     SensingKeypressed {
         key_option: RoundDropdownMenuOf<SensingKeyoptions>,
     },
-    SensingLoudness,
     SensingMousedown,
     SensingTouchingobject {
         #[block(json_name = "TOUCHINGOBJECTMENU")]

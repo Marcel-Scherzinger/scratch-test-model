@@ -25,7 +25,7 @@ pub(crate) use crate::aux::parse_attr::ParseJsonBlockAttribute;
 
 pub use dropdowns::{ExpressionRef, RoundDirectDropdownOf, RoundDropdownMenuOf};
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, derive_more::Deref)]
 pub struct ArgumentReporterName(StringAtArrayPosZero);
 
 impl ParseJsonBlockAttribute for ArgumentReporterName {

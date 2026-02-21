@@ -115,6 +115,7 @@ pub enum ExprBlockKind {
     SensingUsername,
     SensingMousex,
     SensingMousey,
+    SensingLoudness,
     SensingTimer,
 
     SoundVolume,

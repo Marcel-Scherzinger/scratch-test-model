@@ -20,7 +20,7 @@ pub struct ProjectDoc {
     pub(crate) semver: Option<ARc<str>>,
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, PartialEq)]
 #[error("The requested block id isn't associated with a valid block")]
 pub struct NoValidBlockForId;
 
