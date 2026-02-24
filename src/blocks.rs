@@ -6,7 +6,10 @@ mod expressions;
 mod procedures;
 mod statements;
 
-pub use procedures::{ProcedureArgumentDef, ProcedureId};
+pub use procedures::{
+    ProcedureArgumentDef, ProcedureId, ProceduresDefinition, ProceduresDefinitionUnit,
+    ProceduresPrototype,
+};
 
 pub use crate::scopes::block_wrapper::BlockWrapper;
 
