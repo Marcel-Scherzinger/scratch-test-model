@@ -81,6 +81,7 @@ pub type Id = svalue::ARc<str>;
 #[allow(unused)]
 mod _exports {
     pub use crate::aux::AttrLocation;
+    pub(crate) use crate::aux::do_for_attrs::{DoForAttrs, DoForAttrsStrategy};
     pub(crate) use crate::aux::errors::BlockKindError;
     pub use crate::aux::opcode_trait::{AsOpcodeName, AsOpcodeUnit};
     pub(crate) use crate::aux::parse_attr::helper_attr_access;

@@ -1,5 +1,6 @@
 use crate::{
     _exports::{AsOpcodeUnit, BlockKindError, ParseJsonBlock},
+    attrs::{DoForAttrs, DoForAttrsStrategy},
     aux::{JsonBlocks, JsonCtx},
     blocks::{
         CmpBlockKind, CmpBlockKindUnit, EventBlockKind, EventBlockKindUnit, ExprBlockKind,
@@ -121,5 +122,28 @@ fn unknown_no_error<'a, T: ParseJsonBlock>(
             })
         }
         Ok(ok) => Ok(Some(ok)),
+    }
+}
+
+impl<S: DoForAttrsStrategy> DoForAttrs<S> for BlockKind
+where
+    ExprOrCmpBlockKind: DoForAttrs<S>,
+    StmtBlockKind: DoForAttrs<S>,
+    EventBlockKind: DoForAttrs<S>,
+    ProceduresPrototype: DoForAttrs<S>,
+    ProceduresDefinition: DoForAttrs<S>,
+{
+    fn do_for_attrs(
+        &self,
+        inputs: &<S as DoForAttrsStrategy>::Inputs,
+        outputs: &mut <S as DoForAttrsStrategy>::Outputs,
+    ) -> Result<(), <S as DoForAttrsStrategy>::Error> {
+        match self {
+            Self::ExprCmp(b) => b.do_for_attrs(inputs, outputs),
+            Self::Stmt(b) => b.do_for_attrs(inputs, outputs),
+            Self::Event(b) => b.do_for_attrs(inputs, outputs),
+            Self::ProceduresDefinition(b) => b.do_for_attrs(inputs, outputs),
+            Self::ProceduresPrototype(b) => b.do_for_attrs(inputs, outputs),
+        }
     }
 }

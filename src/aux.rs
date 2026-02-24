@@ -1,5 +1,6 @@
 /// copied from [<https://github.com/scratchfoundation/scratch-vm/blob/develop/src/serialization/sb3.js>]
 pub(crate) mod constants;
+pub(crate) mod do_for_attrs;
 pub(crate) mod errors;
 mod json_ctx;
 mod location;

@@ -1,5 +1,6 @@
 mod parse_impls;
 mod valid_attributes;
+
 use proc_macro2::TokenStream as TokenStream2;
 use valid_attributes::{BlockLevelAttribute, my_attributes};
 
@@ -64,6 +65,7 @@ impl quote::ToTokens for BlockKindEnumSpec {
             .collect::<Vec<_>>();
         let opcodes: Vec<_> = self.variants.iter().map(|v| v.opcode.clone()).collect();
         let vis = &self.vis;
+
 
         // unit version
         tokens.extend(quote! {
@@ -147,6 +149,48 @@ impl quote::ToTokens for BlockKindEnumSpec {
                 }
             }
         } ));
+
+        // do for all attributes
+        //
+        let attribute_types = self.variants.iter()
+            .flat_map(|variant| variant.parameters.iter().map(|p| &p.ty)).map(|ty| {
+                quote! { #ty: crate::_exports::DoForAttrs<S> }
+            });
+
+        let variants = self.variants.iter().map(|variant| {
+            let params = variant.parameters.iter().map(|param| {
+                let name = &param.name;
+                quote! { crate::_exports::DoForAttrs::<S>::do_for_attrs(
+                    #name,
+                    inputs_that_are_passed_to_all_attributes, 
+                    outputs_received_by_all_attributes,
+                )?; 
+                }
+            });
+            let names = variant.parameters.iter().map(|param| &param.name);
+            let var_name = &variant.name;
+            quote! {
+                Self::#var_name{ #(#names),* } => { #(#params)* }
+            }
+        });
+
+        tokens.extend(quote!(
+            impl<S: crate::_exports::DoForAttrsStrategy> crate::_exports::DoForAttrs<S> for #name 
+                where
+                    #(#attribute_types),*
+            {
+                fn do_for_attrs(
+                    &self,
+                    inputs_that_are_passed_to_all_attributes: &S::Inputs,
+                    outputs_received_by_all_attributes: &mut S::Outputs
+                ) -> Result<(), S::Error> {
+                    match self {
+                        #(#variants)*
+                    }
+                    Ok(())
+                }
+            }
+    ));
     }
 }
 

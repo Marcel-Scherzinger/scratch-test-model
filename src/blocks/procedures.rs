@@ -5,8 +5,8 @@ use crate::{
     _exports::{BlockKindError, ParseJsonBlock},
     Id,
     attrs::{
-        AttributeContentError, AttributeParseError, Expression, ParseJsonBlockAttribute,
-        ProcedureArgumentId, RefBlock,
+        AttributeContentError, AttributeParseError, DoForAttrs, DoForAttrsStrategy, Expression,
+        ParseJsonBlockAttribute, ProcedureArgumentId, RefBlock,
     },
     aux::errors::BlockJsonStructureError,
     blocks::{ExprOrCmpBlockKind, StmtBlockKind},
@@ -302,4 +302,25 @@ fn force_mutation<'a, 'b>(
     mutation: Option<&'b crate::_exports::BlockProperties<'a>>,
 ) -> Result<&'b crate::_exports::BlockProperties<'a>, BlockJsonStructureError> {
     mutation.ok_or(BlockJsonStructureError::MissingMandatoryAttr("mutation"))
+}
+
+impl<S: DoForAttrsStrategy> DoForAttrs<S> for ProceduresPrototype
+where
+    bool: DoForAttrs<S>,
+    svalue::ARc<str>: DoForAttrs<S>,
+    ProcedureId: DoForAttrs<S>,
+    svalue::ARc<[ProcedureArgumentDef]>: DoForAttrs<S>,
+{
+    fn do_for_attrs(
+        &self,
+        inputs: &<S as DoForAttrsStrategy>::Inputs,
+        outputs: &mut <S as DoForAttrsStrategy>::Outputs,
+    ) -> Result<(), <S as DoForAttrsStrategy>::Error> {
+        self.proccode.do_for_attrs(inputs, outputs)?;
+        self.procedure_id.do_for_attrs(inputs, outputs)?;
+        self.warp.do_for_attrs(inputs, outputs)?;
+        self.arguments.do_for_attrs(inputs, outputs)?;
+
+        Ok(())
+    }
 }

@@ -5,6 +5,7 @@ pub mod dropdowns;
 mod expression;
 mod string_helper;
 
+pub use crate::aux::do_for_attrs::{DoForAttrs, DoForAttrsStrategy};
 pub use color::Color;
 
 pub use data::{List, Variable};
