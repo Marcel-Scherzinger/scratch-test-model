@@ -1,4 +1,10 @@
-use crate::{Id, blocks::BlockKindUnit, scopes::block_wrapper::BlockWrapper};
+use crate::{
+    Id,
+    attrs::RefBlock,
+    blocks::BlockKindUnit,
+    error::BlockReferenceInvalid,
+    scopes::{block_wrapper::BlockWrapper, target_blocks::WrappableKind},
+};
 
 use super::target::Target;
 use itertools::Itertools;
@@ -50,5 +56,26 @@ impl ProjectDoc {
             .flat_map(|trgt| trgt.blocks().iter_blocks())
             .find(|blk| blk.id() == id)
             .ok_or(NoValidBlockForId)
+    }
+
+    pub fn get_specific_kind<T: WrappableKind + PartialEq>(
+        &self,
+        reference: &RefBlock<T>,
+    ) -> Result<&T, BlockReferenceInvalid> {
+        self.targets()
+            .iter()
+            .map(|trgt| trgt.blocks().get_specific_kind(reference))
+            .find(|blk| !matches!(blk, Err(BlockReferenceInvalid::IdNotFound)))
+            .ok_or(BlockReferenceInvalid::IdNotFound)?
+    }
+    pub fn get_specific_with_wrapper<T: WrappableKind>(
+        &self,
+        reference: &RefBlock<T>,
+    ) -> Result<(&T, &svalue::ARc<BlockWrapper>), BlockReferenceInvalid> {
+        self.targets()
+            .iter()
+            .map(|trgt| trgt.blocks().get_specific_with_wrapper(reference))
+            .find(|blk| !matches!(blk, Err(BlockReferenceInvalid::IdNotFound)))
+            .ok_or(BlockReferenceInvalid::IdNotFound)?
     }
 }

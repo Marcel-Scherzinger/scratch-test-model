@@ -6,14 +6,23 @@ use svalue::ARc;
 use crate::{
     _exports::AsOpcodeUnit,
     Id,
+    attrs::RefBlock,
     aux::JsonBlocks,
-    blocks::BlockKindUnit,
+    blocks::{BlockKind, BlockKindUnit},
     scopes::{TargetBlocksError, block_wrapper::BlockWrapper},
 };
 
 #[derive(Debug, PartialEq)]
 pub struct TargetBlocks {
     blocks: HashMap<Id, ARc<BlockWrapper>>,
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, thiserror::Error)]
+pub enum BlockReferenceInvalid {
+    #[error("the tried id doesn't belong to a valid block")]
+    IdNotFound,
+    #[error("the wanted block kind differs from the actual kind")]
+    WrongKind,
 }
 
 impl TargetBlocks {
@@ -53,7 +62,7 @@ impl TargetBlocks {
         self.blocks.values()
     }
     /// Get block by [`Id`]
-    pub fn get(&self, id: &Id) -> Option<&ARc<BlockWrapper>> {
+    pub fn get_by_id(&self, id: &Id) -> Option<&ARc<BlockWrapper>> {
         self.blocks.get(id)
     }
     pub fn iter(&self) -> impl Iterator<Item = (&Id, &ARc<BlockWrapper>)> {
@@ -69,5 +78,101 @@ impl TargetBlocks {
         self.blocks
             .iter()
             .map(|(id, bw)| (id.clone(), bw.inner().opcode()))
+    }
+
+    pub fn get_specific_kind<T: WrappableKind>(
+        &self,
+        reference: &RefBlock<T>,
+    ) -> Result<&T, BlockReferenceInvalid> {
+        let any = self
+            .get_by_id(reference.id())
+            .ok_or(BlockReferenceInvalid::IdNotFound)?
+            .inner();
+        T::ensure(any).ok_or(BlockReferenceInvalid::WrongKind)
+    }
+    pub fn get_specific_with_wrapper<T: WrappableKind>(
+        &self,
+        reference: &RefBlock<T>,
+    ) -> Result<(&T, &svalue::ARc<BlockWrapper>), BlockReferenceInvalid> {
+        let wrapped = self
+            .get_by_id(reference.id())
+            .ok_or(BlockReferenceInvalid::IdNotFound)?;
+        let kind = T::ensure(wrapped.inner()).ok_or(BlockReferenceInvalid::WrongKind)?;
+        Ok((kind, wrapped))
+    }
+}
+
+pub trait WrappableKind {
+    fn ensure(any: &BlockKind) -> Option<&Self>;
+}
+
+impl WrappableKind for crate::blocks::CmpBlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::ExprCmp(crate::blocks::ExprOrCmpBlockKind::Cmp(v)) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+
+impl WrappableKind for crate::blocks::ExprBlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::ExprCmp(crate::blocks::ExprOrCmpBlockKind::Expr(v)) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+
+impl WrappableKind for crate::blocks::BlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        Some(any)
+    }
+}
+impl WrappableKind for crate::blocks::ProceduresDefinition {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::ProceduresDefinition(v) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+impl WrappableKind for crate::blocks::ProceduresPrototype {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::ProceduresPrototype(v) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+impl WrappableKind for crate::blocks::EventBlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::Event(v) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+impl WrappableKind for crate::blocks::StmtBlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::Stmt(v) = any {
+            Some(v)
+        } else {
+            None
+        }
+    }
+}
+impl WrappableKind for crate::blocks::ExprOrCmpBlockKind {
+    fn ensure(any: &BlockKind) -> Option<&Self> {
+        if let BlockKind::ExprCmp(v) = any {
+            Some(v)
+        } else {
+            None
+        }
     }
 }

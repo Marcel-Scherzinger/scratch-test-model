@@ -11,6 +11,7 @@ pub use crate::aux::errors::{
     MandatoryAttrMissingError,
 };
 pub use crate::scopes::project_doc::NoValidBlockForId;
+pub use crate::scopes::target_blocks::BlockReferenceInvalid;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, thiserror::Error)]
 pub enum TargetDataError<Kind> {
