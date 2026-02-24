@@ -114,6 +114,14 @@ impl<T> ParseJsonBlockAttribute for RefBlock<T> {
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash)]
 pub struct ProcedureArgumentId(pub(crate) crate::Id);
+
+impl ProcedureArgumentId {
+    // not a block id but similar pattern
+    pub fn id(&self) -> &svalue::ARc<str> {
+        &self.0
+    }
+}
+
 impl ParseJsonBlockAttribute for ProcedureArgumentId {
     fn parse_json_block_attr_without_expecting_shadow<'a>(
         all_target_blocks: crate::_exports::JsonBlocks<'a>,

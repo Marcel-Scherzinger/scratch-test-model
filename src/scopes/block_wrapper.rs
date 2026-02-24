@@ -41,7 +41,7 @@ pub struct BlockWrapper {
     top_level_pos: Option<Position>,
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord, derive_getters::Getters)]
 pub struct Position {
     x: i64,
     y: i64,

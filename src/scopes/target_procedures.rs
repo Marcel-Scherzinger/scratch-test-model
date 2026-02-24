@@ -65,4 +65,10 @@ impl TargetProcedures {
     pub fn get(&self, id: &ProcedureId) -> Option<&Procedure> {
         self.0.get(id)
     }
+    pub fn iter(&self) -> impl Iterator<Item = (&ProcedureId, &Procedure)> {
+        self.0.iter()
+    }
+    pub fn iter_procedures(&self) -> impl Iterator<Item = &Procedure> {
+        self.0.values()
+    }
 }

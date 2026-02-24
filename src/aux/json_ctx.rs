@@ -1,4 +1,4 @@
-#[derive(Debug, derive_more::Display)]
+#[derive(Debug, PartialEq, Clone, Hash, derive_more::Display)]
 #[display("{inner_error}: {json_ctx}")]
 pub struct JsonCtx<'a, E> {
     pub(crate) inner_error: E,

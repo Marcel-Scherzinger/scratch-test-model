@@ -1,12 +1,15 @@
 use std::path::PathBuf;
 
 use crate::{
-    _exports::BlockKindError,
     Id,
     attrs::data::{ListKind, VariableKind},
     aux::JsonCtx,
 };
 
+pub use crate::aux::errors::{
+    AttributeContentError, AttributeParseError, BlockJsonStructureError, BlockKindError,
+    MandatoryAttrMissingError,
+};
 pub use crate::scopes::project_doc::NoValidBlockForId;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, thiserror::Error)]
@@ -22,7 +25,7 @@ pub enum TargetDataError<Kind> {
     },
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, thiserror::Error)]
 pub enum BlockError<'a> {
     #[error("missing block attr: {0}")]
     MissingMandatoryAttr(&'static str),

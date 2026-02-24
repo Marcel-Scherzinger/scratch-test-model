@@ -101,7 +101,7 @@ pub enum LooksCostumeMenu {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, derive_more::Deref)]
 pub struct SensingOfObject(svalue::ARc<str>);
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]

@@ -1,6 +1,6 @@
 use crate::aux::{AttrLocation, JsonCtx};
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, Clone, thiserror::Error)]
 pub enum BlockJsonStructureError {
     #[error("the requested id doesn't exist in the current target")]
     IdNotFound,
@@ -15,7 +15,7 @@ pub enum BlockJsonStructureError {
     },
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, Clone, thiserror::Error)]
 pub enum BlockKindError<'a> {
     /// The found opcode is no valid choice for the tried block kind.
     #[error("the found opcode is no valid choice for the tried block kind: {0}")]
@@ -32,7 +32,7 @@ pub enum BlockKindError<'a> {
     },
 }
 
-#[derive(derive_more::Debug, thiserror::Error)]
+#[derive(derive_more::Debug, PartialEq, Clone, thiserror::Error)]
 pub enum AttributeContentError<'a> {
     // Custom-Assoc-Type? / Subblock für alle?
     #[error("{0}")]
@@ -64,7 +64,7 @@ pub enum AttributeContentError<'a> {
     Subblock(Box<JsonCtx<'a, BlockKindError<'a>>>),
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, Clone, thiserror::Error)]
 pub enum AttributeParseError<'a> {
     /// The attributes only value is a singleton array indicating that it contains shadow
     /// information, but the array has no real data
@@ -86,7 +86,7 @@ pub enum AttributeParseError<'a> {
     },
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, PartialOrd, Clone, thiserror::Error)]
 #[error(
     "the mandatory block attribute '{key}' is missing from the expected property set '{location}'"
 )]

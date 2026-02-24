@@ -1,6 +1,6 @@
 use crate::{attrs::AttributeContentError as A, aux::constants};
 
-#[derive(Debug, PartialEq, Clone, derive_getters::Getters)]
+#[derive(Debug, PartialEq, PartialOrd, Clone, Hash, derive_getters::Getters)]
 pub struct BroadcastId {
     human_name: svalue::ARc<str>,
     id: crate::Id,

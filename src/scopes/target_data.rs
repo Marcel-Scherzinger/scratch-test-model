@@ -24,6 +24,12 @@ impl<Kind, Data> TargetData<Kind, Data> {
     pub fn values(&self) -> impl Iterator<Item = &Data> {
         self.map.values()
     }
+    pub fn ids(&self) -> impl Iterator<Item = &Id> {
+        self.map.keys()
+    }
+    pub fn get<'a>(&'a self, id: &Id) -> Option<&'a Data> {
+        self.map.get(id)
+    }
 }
 
 impl<Kind: DataEntry> TargetData<Kind, Kind::Data> {

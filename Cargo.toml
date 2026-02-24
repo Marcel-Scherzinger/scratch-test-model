@@ -14,7 +14,7 @@ const-str = { version = "0.7.0", default-features = false }
 itertools = "0.14.0"
 
 scratch-test-model-proc = { path = "./scratch-test-model-proc" }
-ouroboros = "0.18.5"
+ouroboros = {version = "0.18.5", optional = true}
 either = "1.15.0"
 
 [dependencies.svalue]
@@ -28,5 +28,5 @@ rayon = "1.11.0"
 
 [features]
 default = ["sb3"]
-sb3 = [ "dep:zip" ]
+sb3 = [ "dep:zip", "dep:ouroboros" ]
 thread-share = ["svalue/thread-share"]

@@ -56,6 +56,12 @@ impl TargetBlocks {
     pub fn get(&self, id: &Id) -> Option<&ARc<BlockWrapper>> {
         self.blocks.get(id)
     }
+    pub fn iter(&self) -> impl Iterator<Item = (&Id, &ARc<BlockWrapper>)> {
+        self.blocks.iter()
+    }
+    pub fn iter_ids(&self) -> impl Iterator<Item = &Id> {
+        self.blocks.keys()
+    }
 
     /// Iterator of [`Id`]s and [opcode names](https://en.scratch-wiki.info/wiki/List_of_Block_Opcodes)
     /// of valid and invalid blocks
