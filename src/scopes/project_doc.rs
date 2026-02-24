@@ -31,13 +31,13 @@ pub struct ProjectDoc {
 pub struct NoValidBlockForId;
 
 impl ProjectDoc {
-    pub fn ids_with_opcodes(&self) -> impl Iterator<Item = (Id, BlockKindUnit)> {
+    pub fn ids_with_opcodes(&self) -> impl Iterator<Item = (&Id, BlockKindUnit)> {
         self.targets()
             .iter()
             .flat_map(|t| t.blocks().ids_with_opcodes())
     }
 
-    pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (Id, BlockKindUnit)> {
+    pub fn su_ids_with_blocks(&self) -> impl Iterator<Item = (&Id, BlockKindUnit)> {
         self.ids_with_opcodes().sorted().unique()
     }
     /*

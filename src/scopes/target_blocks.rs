@@ -74,10 +74,8 @@ impl TargetBlocks {
 
     /// Iterator of [`Id`]s and [opcode names](https://en.scratch-wiki.info/wiki/List_of_Block_Opcodes)
     /// of valid and invalid blocks
-    pub fn ids_with_opcodes(&self) -> impl Iterator<Item = (Id, BlockKindUnit)> {
-        self.blocks
-            .iter()
-            .map(|(id, bw)| (id.clone(), bw.inner().opcode()))
+    pub fn ids_with_opcodes(&self) -> impl Iterator<Item = (&Id, BlockKindUnit)> {
+        self.blocks.iter().map(|(id, bw)| (id, bw.inner().opcode()))
     }
 
     pub fn get_specific_kind<T: WrappableKind>(
