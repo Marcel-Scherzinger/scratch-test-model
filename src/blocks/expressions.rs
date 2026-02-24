@@ -10,10 +10,6 @@ use scratch_test_model_proc::Block;
 #[derive(Debug, PartialEq, Clone, Block)]
 #[block(default_location = inputs)]
 pub enum ExprBlockKind {
-    ArgumentReporterBoolean {
-        #[block(location = fields)]
-        value: ArgumentReporterName,
-    },
     ArgumentReporterStringNumber {
         #[block(location = fields)]
         value: ArgumentReporterName,
