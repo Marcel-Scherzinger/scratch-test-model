@@ -6,6 +6,7 @@ mod expressions;
 mod procedures;
 mod statements;
 
+pub use crate::aux::opcode_trait::{AsOpcodeName, AsOpcodeUnit};
 pub use procedures::{
     ProcedureArgumentDef, ProcedureId, ProceduresDefinition, ProceduresDefinitionUnit,
     ProceduresPrototype,
