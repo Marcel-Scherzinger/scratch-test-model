@@ -304,18 +304,18 @@ fn force_mutation<'a, 'b>(
     mutation.ok_or(BlockJsonStructureError::MissingMandatoryAttr("mutation"))
 }
 
-impl<S: DoForAttrsStrategy> DoForAttrs<S> for ProceduresPrototype
+impl<'a, S: DoForAttrsStrategy<'a>> DoForAttrs<'a, S> for ProceduresPrototype
 where
-    bool: DoForAttrs<S>,
-    svalue::ARc<str>: DoForAttrs<S>,
-    ProcedureId: DoForAttrs<S>,
-    svalue::ARc<[ProcedureArgumentDef]>: DoForAttrs<S>,
+    bool: DoForAttrs<'a, S>,
+    svalue::ARc<str>: DoForAttrs<'a, S>,
+    ProcedureId: DoForAttrs<'a, S>,
+    svalue::ARc<[ProcedureArgumentDef]>: DoForAttrs<'a, S>,
 {
     fn do_for_attrs(
-        &self,
-        inputs: &<S as DoForAttrsStrategy>::Inputs,
-        outputs: &mut <S as DoForAttrsStrategy>::Outputs,
-    ) -> Result<(), <S as DoForAttrsStrategy>::Error> {
+        &'a self,
+        inputs: &<S as DoForAttrsStrategy<'a>>::Inputs,
+        outputs: &mut <S as DoForAttrsStrategy<'a>>::Outputs,
+    ) -> Result<(), <S as DoForAttrsStrategy<'a>>::Error> {
         self.proccode.do_for_attrs(inputs, outputs)?;
         self.procedure_id.do_for_attrs(inputs, outputs)?;
         self.warp.do_for_attrs(inputs, outputs)?;

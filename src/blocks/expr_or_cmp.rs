@@ -27,16 +27,16 @@ pub enum ExprOrCmpBlockKindUnit {
     Cmp(CmpBlockKindUnit),
 }
 
-impl<S: DoForAttrsStrategy> DoForAttrs<S> for ExprOrCmpBlockKind
+impl<'a, S: DoForAttrsStrategy<'a>> DoForAttrs<'a, S> for ExprOrCmpBlockKind
 where
-    ExprBlockKind: DoForAttrs<S>,
-    CmpBlockKind: DoForAttrs<S>,
+    ExprBlockKind: DoForAttrs<'a, S>,
+    CmpBlockKind: DoForAttrs<'a, S>,
 {
     fn do_for_attrs(
-        &self,
-        inputs: &<S as DoForAttrsStrategy>::Inputs,
-        outputs: &mut <S as DoForAttrsStrategy>::Outputs,
-    ) -> Result<(), <S as DoForAttrsStrategy>::Error> {
+        &'a self,
+        inputs: &<S as DoForAttrsStrategy<'a>>::Inputs,
+        outputs: &mut <S as DoForAttrsStrategy<'a>>::Outputs,
+    ) -> Result<(), <S as DoForAttrsStrategy<'a>>::Error> {
         match self {
             Self::Expr(k) => k.do_for_attrs(inputs, outputs),
             Self::Cmp(k) => k.do_for_attrs(inputs, outputs),

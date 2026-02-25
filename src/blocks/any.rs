@@ -125,19 +125,19 @@ fn unknown_no_error<'a, T: ParseJsonBlock>(
     }
 }
 
-impl<S: DoForAttrsStrategy> DoForAttrs<S> for BlockKind
+impl<'a, S: DoForAttrsStrategy<'a>> DoForAttrs<'a, S> for BlockKind
 where
-    ExprOrCmpBlockKind: DoForAttrs<S>,
-    StmtBlockKind: DoForAttrs<S>,
-    EventBlockKind: DoForAttrs<S>,
-    ProceduresPrototype: DoForAttrs<S>,
-    ProceduresDefinition: DoForAttrs<S>,
+    ExprOrCmpBlockKind: DoForAttrs<'a, S>,
+    StmtBlockKind: DoForAttrs<'a, S>,
+    EventBlockKind: DoForAttrs<'a, S>,
+    ProceduresPrototype: DoForAttrs<'a, S>,
+    ProceduresDefinition: DoForAttrs<'a, S>,
 {
     fn do_for_attrs(
-        &self,
-        inputs: &<S as DoForAttrsStrategy>::Inputs,
-        outputs: &mut <S as DoForAttrsStrategy>::Outputs,
-    ) -> Result<(), <S as DoForAttrsStrategy>::Error> {
+        &'a self,
+        inputs: &<S as DoForAttrsStrategy<'a>>::Inputs,
+        outputs: &mut <S as DoForAttrsStrategy<'a>>::Outputs,
+    ) -> Result<(), <S as DoForAttrsStrategy<'a>>::Error> {
         match self {
             Self::ExprCmp(b) => b.do_for_attrs(inputs, outputs),
             Self::Stmt(b) => b.do_for_attrs(inputs, outputs),

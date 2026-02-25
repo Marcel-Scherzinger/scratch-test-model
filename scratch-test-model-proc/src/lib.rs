@@ -154,13 +154,13 @@ impl quote::ToTokens for BlockKindEnumSpec {
         //
         let attribute_types = self.variants.iter()
             .flat_map(|variant| variant.parameters.iter().map(|p| &p.ty)).map(|ty| {
-                quote! { #ty: crate::_exports::DoForAttrs<S> }
+                quote! { #ty: crate::_exports::DoForAttrs<'a, S> }
             });
 
         let variants = self.variants.iter().map(|variant| {
             let params = variant.parameters.iter().map(|param| {
                 let name = &param.name;
-                quote! { crate::_exports::DoForAttrs::<S>::do_for_attrs(
+                quote! { crate::_exports::DoForAttrs::<'a, S>::do_for_attrs(
                     #name,
                     inputs_that_are_passed_to_all_attributes, 
                     outputs_received_by_all_attributes,
@@ -175,12 +175,12 @@ impl quote::ToTokens for BlockKindEnumSpec {
         });
 
         tokens.extend(quote!(
-            impl<S: crate::_exports::DoForAttrsStrategy> crate::_exports::DoForAttrs<S> for #name 
+            impl<'a, S: crate::_exports::DoForAttrsStrategy<'a>> crate::_exports::DoForAttrs<'a, S> for #name 
                 where
                     #(#attribute_types),*
             {
                 fn do_for_attrs(
-                    &self,
+                    &'a self,
                     inputs_that_are_passed_to_all_attributes: &S::Inputs,
                     outputs_received_by_all_attributes: &mut S::Outputs
                 ) -> Result<(), S::Error> {
