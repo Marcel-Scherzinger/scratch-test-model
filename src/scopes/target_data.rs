@@ -11,6 +11,14 @@ use crate::{
 pub type TargetVariables = TargetData<VariableKind, (Variable, SValue)>;
 pub type TargetLists = TargetData<ListKind, (List, Vec<SValue>)>;
 
+/// Scratch stores for every variable and list the value inside the file that it
+/// had when the user pressed "Save" in the editor.
+///
+/// For [`Variable`]s this is a single `SValue`.
+/// For [`List`]s this is a collection ([`Vec`]) `SValue`s.
+///
+/// Relying on those values is discouraged as the user could have stored anything there.
+/// This could be considered to be equivalent to reading uninitialized variables.
 #[derive(Debug, PartialEq)]
 pub struct TargetData<Kind, Data> {
     /// map from data id to name and saved value

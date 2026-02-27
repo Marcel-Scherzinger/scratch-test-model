@@ -26,9 +26,10 @@ pub struct ProjectDoc {
     pub(crate) semver: Option<ARc<str>>,
 }
 
+/// No block with the provided id was found.
 #[derive(Debug, thiserror::Error, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 #[error("The requested block id isn't associated with a valid block")]
-pub struct NoValidBlockForId;
+pub struct NoValidBlockForId(());
 
 impl ProjectDoc {
     pub fn ids_with_opcodes(&self) -> impl Iterator<Item = (&Id, BlockKindUnit)> {
@@ -55,7 +56,7 @@ impl ProjectDoc {
             .iter()
             .flat_map(|trgt| trgt.blocks().iter_blocks())
             .find(|blk| blk.id() == id)
-            .ok_or(NoValidBlockForId)
+            .ok_or(NoValidBlockForId(()))
     }
 
     pub fn get_specific_kind<T: WrappableKind + PartialEq>(

@@ -9,6 +9,7 @@ pub(crate) use crate::error::TargetBlocksError;
 pub use project_doc::ProjectDoc;
 pub use target::Target;
 pub use target_blocks::TargetBlocks;
+pub use target_data::TargetData;
 pub use target_data::TargetLists;
 pub use target_data::TargetVariables;
 pub use target_procedures::TargetProcedures;

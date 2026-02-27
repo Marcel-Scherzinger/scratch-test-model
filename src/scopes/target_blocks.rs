@@ -17,6 +17,7 @@ pub struct TargetBlocks {
     blocks: HashMap<Id, ARc<BlockWrapper>>,
 }
 
+/// Produced by for example [`ProjectDoc::get_specific_kind`](crate::scopes::ProjectDoc::get_specific_kind).
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, thiserror::Error)]
 pub enum BlockReferenceInvalid {
     #[error("the tried id doesn't belong to a valid block")]

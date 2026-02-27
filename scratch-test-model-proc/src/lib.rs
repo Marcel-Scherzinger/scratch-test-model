@@ -64,6 +64,7 @@ impl quote::ToTokens for BlockKindEnumSpec {
             .map(|v| v.name.clone())
             .collect::<Vec<_>>();
         let opcodes: Vec<_> = self.variants.iter().map(|v| v.opcode.clone()).collect();
+        let opcode_comments = opcodes.iter().map(|o| format!("`{o}` is the json-side opcode"));
         let vis = &self.vis;
 
 
@@ -71,7 +72,10 @@ impl quote::ToTokens for BlockKindEnumSpec {
         tokens.extend(quote! {
             #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Hash)]
             #vis enum #unit_name {
-                #( #variants ,)*
+                #( 
+                    #[doc = #opcode_comments]
+                    #variants
+                ,)*
             }
             impl crate::_exports::AsOpcodeUnit for #name {
                 type OpcodeUnit = #unit_name;
@@ -83,6 +87,9 @@ impl quote::ToTokens for BlockKindEnumSpec {
                 }
             }
             impl #unit_name {
+                /// Method with the same functionality as
+                /// [`AsOpcodeName::opcode_name`](crate::_exports::AsOpcodeName::opcode_name),
+                /// but this can be used in a `const`-context.
                 pub const fn k_opcode_name(&self) -> &'static str {
                     match self {
                         #( Self::#variants => #opcodes, )*
