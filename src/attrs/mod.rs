@@ -8,7 +8,7 @@ mod string_helper;
 pub use crate::aux::do_for_attrs::{DoForAttrs, DoForAttrsStrategy};
 pub use color::Color;
 
-pub use data::{List, Variable};
+pub use data::{DataId, List, ListKind, Variable, VariableKind};
 
 pub use dropdowns::{AnyDropdownOf, DirectDropdownOf, DropdownMenuOf};
 
