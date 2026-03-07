@@ -46,3 +46,14 @@ fn try_parsing_further() {
 fn try_parsing_io_unsupported_archive() {
     parse_in_folder("sb3/further/unsupported-archive");
 }
+#[test]
+fn try_parsing_zip() {
+    parse_in_folder("sb3/further/unsupported-archive/first.zip");
+    parse_in_folder("sb3/further/unsupported-archive/second.zip");
+}
+#[test]
+#[should_panic]
+fn try_parsing_sb3() {
+    parse_in_folder("sb3/further/unsupported-archive/first.sb3");
+    parse_in_folder("sb3/further/unsupported-archive/second.sb3");
+}
