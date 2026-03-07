@@ -42,7 +42,6 @@ fn try_parsing_further() {
 //
 // It's marked as `should_panic` so it's noticed if a future version of a dependency fixes this
 #[test]
-#[should_panic]
 fn try_parsing_io_unsupported_archive() {
     parse_in_folder("sb3/further/unsupported-archive");
 }
@@ -52,7 +51,6 @@ fn try_parsing_zip() {
     parse_in_folder("sb3/further/unsupported-archive/second.zip");
 }
 #[test]
-#[should_panic]
 fn try_parsing_sb3() {
     parse_in_folder("sb3/further/unsupported-archive/first.sb3");
     parse_in_folder("sb3/further/unsupported-archive/second.sb3");

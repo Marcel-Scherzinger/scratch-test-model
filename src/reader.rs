@@ -27,32 +27,43 @@ impl ProjectDoc {
 
 #[cfg(feature = "sb3")]
 mod sb3 {
-    use std::{io::Read, path::Path};
+    use std::{
+        io::{Read, Seek},
+        path::Path,
+    };
 
     use crate::{
         ProjectDoc,
         error::{DocError, ModelError},
     };
-    pub fn json_from_sb3_stream<R: Read, T: std::fmt::Display + Sized>(
-        handle: &mut R,
-        tag: Option<T>,
-    ) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
-        let tag = tag.map(|s| format!(" {s}")).unwrap_or_default();
-        loop {
-            match zip::read::read_zipfile_from_stream(handle) {
-                Ok(Some(file)) => {
-                    if file.name().to_lowercase().ends_with(".json") {
-                        let value: serde_json::Value = serde_json::from_reader(file)?;
-                        return Ok(value);
-                    }
-                }
-                Ok(None) => Err("no document")?,
+
+    fn read_zip_file<R: Read + Seek, S: std::fmt::Debug + Sized>(
+        file: &mut R,
+        tag: S,
+    ) -> Result<serde_json::Value, DocError> {
+        let mut archive = zip::ZipArchive::new(file)?;
+        for idx in 0..archive.len() {
+            let file = match archive.by_index(idx) {
+                Ok(file) => file,
                 Err(e) => {
-                    log::error!("Error encountered while reading sb3{tag}: {e:?}");
-                    Err(DocError::Io(e.into()))?
+                    log::error!("Error encountered while reading sb3{tag:?}: {e:?}");
+                    return Err(DocError::Io(e.into()));
                 }
+            };
+            if file.name().to_lowercase().ends_with(".json") {
+                let value: serde_json::Value = serde_json::from_reader(file)?;
+                return Ok(value);
             }
         }
+        Err(DocError::NoDocument)
+    }
+
+    pub fn json_from_sb3_stream<R: Read + Seek, T: std::fmt::Display + Sized>(
+        handle: &mut R,
+        tag: Option<T>,
+    ) -> Result<serde_json::Value, DocError> {
+        let tag = tag.map(|s| format!(" {s}")).unwrap_or_default();
+        read_zip_file(handle, tag)
     }
     pub fn json_from_sb3_file<'a>(
         path: impl AsRef<Path> + 'a,
@@ -62,21 +73,7 @@ mod sb3 {
         fn from_sb3_file_impl(path: &Path) -> Result<serde_json::Value, DocError> {
             let mut handle = std::fs::File::open(path)
                 .map_err(|err| DocError::FileRead(path.to_path_buf(), err))?;
-            loop {
-                match zip::read::read_zipfile_from_stream(&mut handle) {
-                    Ok(Some(file)) => {
-                        if file.name().to_lowercase().ends_with(".json") {
-                            let value: serde_json::Value = serde_json::from_reader(file)?;
-                            return Ok(value);
-                        }
-                    }
-                    Ok(None) => Err(DocError::NoDocument)?,
-                    Err(e) => {
-                        log::error!("Error encountered while reading sb3 {path:?}: {e:?}");
-                        Err(DocError::Io(e.into()))?
-                    }
-                }
-            }
+            read_zip_file(&mut handle, path)
         }
         let path = path.as_ref();
         from_sb3_file_impl(path)
@@ -108,6 +105,12 @@ mod sb3 {
     }
 
     pub type ReadResult = Result<ParseResult, DocError>;
+
+    impl From<zip::result::ZipError> for DocError {
+        fn from(value: zip::result::ZipError) -> Self {
+            DocError::Io(Box::new(value))
+        }
+    }
 
     impl ProjectDoc {
         // TODO: think about public API
@@ -147,21 +150,8 @@ mod sb3 {
             fn from_sb3_file_impl(path: &Path) -> ReadResult {
                 let mut handle = std::fs::File::open(path)
                     .map_err(|err| DocError::FileRead(path.to_path_buf(), err))?;
-                loop {
-                    match zip::read::read_zipfile_from_stream(&mut handle) {
-                        Ok(Some(file)) => {
-                            if file.name().to_lowercase().ends_with(".json") {
-                                let value: serde_json::Value = serde_json::from_reader(file)?;
-                                return Ok(ProjectDoc::from_owned_json(value));
-                            }
-                        }
-                        Ok(None) => Err(DocError::NoDocument)?,
-                        Err(e) => {
-                            log::error!("Error encountered while reading sb3 {path:?}: {e:?}");
-                            Err(DocError::Io(e.into()))?
-                        }
-                    }
-                }
+                let value = read_zip_file(&mut handle, path)?;
+                Ok(ProjectDoc::from_owned_json(value))
             }
             let path = path.as_ref();
             from_sb3_file_impl(path)
