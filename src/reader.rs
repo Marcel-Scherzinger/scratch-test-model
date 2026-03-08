@@ -4,7 +4,7 @@ use crate::scopes::{ProjectDoc, Target};
 
 #[cfg(feature = "sb3")]
 #[allow(unused)]
-pub use sb3::{ParseResult, json_from_sb3_file, json_from_sb3_stream};
+pub use sb3::{json_from_sb3_file, json_from_sb3_stream};
 
 impl ProjectDoc {
     /// Parses a document from a json value
@@ -27,60 +27,56 @@ impl ProjectDoc {
 
 #[cfg(feature = "sb3")]
 mod sb3 {
-    use std::{io::Read, path::Path};
+    use std::{
+        io::{Read, Seek},
+        path::Path,
+    };
 
     use crate::{
         ProjectDoc,
         error::{DocError, ModelError},
     };
-    pub fn json_from_sb3_stream<R: Read, T: std::fmt::Display + Sized>(
-        handle: &mut R,
-        tag: Option<T>,
-    ) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
-        let tag = tag.map(|s| format!(" {s}")).unwrap_or_default();
-        loop {
-            match zip::read::read_zipfile_from_stream(handle) {
-                Ok(Some(file)) => {
-                    if file.name().to_lowercase().ends_with(".json") {
-                        let value: serde_json::Value = serde_json::from_reader(file)?;
-                        return Ok(value);
-                    }
+
+    fn read_json_from_file<R: Read + Seek, T: std::fmt::Debug>(
+        reader: &mut R,
+        tag: T,
+    ) -> Result<serde_json::Value, DocError> {
+        let mut archive = zip::ZipArchive::new(reader)?;
+        for idx in 0..archive.len() {
+            let file = match archive.by_index(idx) {
+                Ok(ok) => ok,
+                Err(err) => {
+                    log::error!("Error encountered while reading sb3 {tag:?}: {err}");
+                    return Err(DocError::Io(err.into()));
                 }
-                Ok(None) => Err("no document")?,
-                Err(e) => {
-                    log::error!("Error encountered while reading sb3{tag}: {e:?}");
-                    Err(DocError::Io(e.into()))?
-                }
+            };
+            if file.name().to_lowercase().ends_with(".json") {
+                return Ok(serde_json::from_reader(file)?);
             }
         }
+        Err(DocError::NoDocument)
     }
-    pub fn json_from_sb3_file<'a>(
-        path: impl AsRef<Path> + 'a,
+
+    pub fn json_from_sb3_stream<R: Read + Seek, T: std::fmt::Debug>(
+        handle: &mut R,
+        tag: Option<T>,
     ) -> Result<serde_json::Value, DocError> {
+        let tag = tag.map(|s| format!("{s:?}")).unwrap_or_default();
+        read_json_from_file(handle, tag)
+    }
+    pub fn json_from_sb3_file(path: impl AsRef<Path>) -> Result<serde_json::Value, DocError> {
         // wrapper is generic and will be duplicated for every concrete type
         // while this implementation can be used for all of them
         fn from_sb3_file_impl(path: &Path) -> Result<serde_json::Value, DocError> {
             let mut handle = std::fs::File::open(path)
                 .map_err(|err| DocError::FileRead(path.to_path_buf(), err))?;
-            loop {
-                match zip::read::read_zipfile_from_stream(&mut handle) {
-                    Ok(Some(file)) => {
-                        if file.name().to_lowercase().ends_with(".json") {
-                            let value: serde_json::Value = serde_json::from_reader(file)?;
-                            return Ok(value);
-                        }
-                    }
-                    Ok(None) => Err(DocError::NoDocument)?,
-                    Err(e) => {
-                        log::error!("Error encountered while reading sb3 {path:?}: {e:?}");
-                        Err(DocError::Io(e.into()))?
-                    }
-                }
-            }
+            read_json_from_file(&mut handle, path)
         }
         let path = path.as_ref();
         from_sb3_file_impl(path)
     }
+
+    // TODO: think about public API
 
     #[ouroboros::self_referencing]
     pub struct InnerParseResult {
