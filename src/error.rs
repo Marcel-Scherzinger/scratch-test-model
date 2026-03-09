@@ -149,6 +149,7 @@ pub enum DocError {
     FileRead(PathBuf, std::io::Error),
 }
 
+#[cfg(feature = "sb3")]
 impl From<zip::result::ZipError> for DocError {
     fn from(value: zip::result::ZipError) -> Self {
         Self::Io(value.into())
