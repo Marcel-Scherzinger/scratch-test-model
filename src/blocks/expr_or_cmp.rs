@@ -20,6 +20,7 @@ pub enum ExprOrCmpBlockKind {
     Ord,
     Hash,
 )]
+#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(untagged))]
 pub enum ExprOrCmpBlockKindUnit {
