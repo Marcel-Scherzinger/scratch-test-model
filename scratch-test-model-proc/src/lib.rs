@@ -65,15 +65,18 @@ impl quote::ToTokens for BlockKindEnumSpec {
             .collect::<Vec<_>>();
         let opcodes: Vec<_> = self.variants.iter().map(|v| v.opcode.clone()).collect();
         let opcode_comments = opcodes.iter().map(|o| format!("`{o}` is the json-side opcode"));
+        let opcode_names = opcodes.iter();
         let vis = &self.vis;
 
 
         // unit version
         tokens.extend(quote! {
             #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Hash)]
+            #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
             #vis enum #unit_name {
                 #( 
                     #[doc = #opcode_comments]
+                    #[cfg_attr(feature = "serde", serde(rename = #opcode_names))]
                     #variants
                 ,)*
             }

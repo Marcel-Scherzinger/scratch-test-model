@@ -34,6 +34,8 @@ pub enum BlockKind {
     Ord,
     Hash,
 )]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(untagged))]
 #[display("{_variant}")]
 pub enum BlockKindUnit {
     Event(EventBlockKindUnit),
