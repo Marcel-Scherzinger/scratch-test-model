@@ -4,6 +4,7 @@ use crate::blocks::{BlockKindUnit, EventBlockKindUnit, ExprOrCmpBlockKindUnit, S
 #[cfg(feature = "serde")]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[serde(untagged)]
 pub(crate) enum BlockKindUnitSerDe {
     Event(EventBlockKindUnit),
@@ -45,6 +46,7 @@ impl From<BlockKindUnit> for BlockKindUnitSerDe {
 
 #[cfg(feature = "serde")]
 #[derive(serde::Serialize, serde::Deserialize)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
 pub(crate) enum ProceduresSerDe {
     #[serde(rename = "procedures_prototype")]

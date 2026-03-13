@@ -18,6 +18,7 @@ ouroboros = {version = "0.18.5", optional = true}
 either = "1.15.0"
 serde = { version = "1.0", features = ["derive"], optional = true }
 schemars = { version = "1.2.1", optional = true }
+utoipa = { version = "5.4", optional = true }
 
 [dependencies.svalue]
 git = "https://github.com/Marcel-Scherzinger/scratch-test-value"
@@ -36,3 +37,4 @@ sb3 = [ "dep:zip", "dep:ouroboros" ]
 thread-share = ["svalue/thread-share"]
 serde = ["dep:serde"]
 schemars = ["dep:schemars", "serde"]
+utoipa = ["dep:utoipa", "serde"]

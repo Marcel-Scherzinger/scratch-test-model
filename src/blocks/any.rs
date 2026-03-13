@@ -37,6 +37,7 @@ use crate::blocks::serde_any_unit::BlockKindUnitSerDe;
 )]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[cfg_attr(feature = "serde", serde(from = "BlockKindUnitSerDe"))]
 #[cfg_attr(feature = "serde", serde(into = "BlockKindUnitSerDe"))]
 #[display("{_variant}")]

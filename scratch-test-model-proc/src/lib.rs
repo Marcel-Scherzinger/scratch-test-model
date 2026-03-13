@@ -73,6 +73,7 @@ impl quote::ToTokens for BlockKindEnumSpec {
         tokens.extend(quote! {
             #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Hash)]
             #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+            #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
             #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
             #vis enum #unit_name {
                 #( 
