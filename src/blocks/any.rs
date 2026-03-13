@@ -20,7 +20,8 @@ pub enum BlockKind {
     ExprCmp(ExprOrCmpBlockKind),
     Stmt(StmtBlockKind),
 }
-
+#[cfg(feature = "serde")]
+use crate::blocks::serde_any_unit::BlockKindUnitSerDe;
 /// main block type is [`BlockKind`]
 #[derive(
     Debug,
@@ -34,9 +35,10 @@ pub enum BlockKind {
     Ord,
     Hash,
 )]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
-#[cfg_attr(feature = "serde", serde(untagged))]
+#[cfg_attr(feature = "serde", serde(from = "BlockKindUnitSerDe"))]
+#[cfg_attr(feature = "serde", serde(into = "BlockKindUnitSerDe"))]
 #[display("{_variant}")]
 pub enum BlockKindUnit {
     Event(EventBlockKindUnit),
@@ -47,6 +49,7 @@ pub enum BlockKindUnit {
     #[display("procedures_definition")]
     ProceduresDefinition,
 }
+
 impl From<ExprBlockKindUnit> for BlockKindUnit {
     fn from(value: ExprBlockKindUnit) -> Self {
         Self::ExprCmp(value.into())

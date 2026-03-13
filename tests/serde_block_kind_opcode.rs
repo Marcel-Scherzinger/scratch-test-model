@@ -21,4 +21,16 @@ fn test_serde_block_kind_unit() {
     assert_eq!(r#""operator_or""#, string.as_str());
     let b: CmpBlockKindUnit = serde_json::from_str(&string).unwrap();
     assert_eq!(CmpBlockKindUnit::OperatorOr, b);
+
+    let x = BlockKindUnit::ProceduresPrototype;
+    let string = serde_json::to_string(&x).unwrap();
+    assert_eq!(r#""procedures_prototype""#, string.as_str());
+    let b: BlockKindUnit = serde_json::from_str(&string).unwrap();
+    assert_eq!(BlockKindUnit::ProceduresPrototype, b);
+
+    let x = BlockKindUnit::ProceduresDefinition;
+    let string = serde_json::to_string(&x).unwrap();
+    assert_eq!(r#""procedures_definition""#, string.as_str());
+    let b: BlockKindUnit = serde_json::from_str(&string).unwrap();
+    assert_eq!(BlockKindUnit::ProceduresDefinition, b);
 }

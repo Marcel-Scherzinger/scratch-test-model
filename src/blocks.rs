@@ -4,6 +4,7 @@ mod events;
 mod expr_or_cmp;
 mod expressions;
 mod procedures;
+mod serde_any_unit;
 mod statements;
 
 pub use crate::aux::opcode_trait::{AsOpcodeName, AsOpcodeUnit};
