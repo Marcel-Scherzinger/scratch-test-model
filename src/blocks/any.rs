@@ -20,8 +20,6 @@ pub enum BlockKind {
     ExprCmp(ExprOrCmpBlockKind),
     Stmt(StmtBlockKind),
 }
-#[cfg(feature = "serde")]
-use crate::blocks::serde_any_unit::BlockKindUnitSerDe;
 /// main block type is [`BlockKind`]
 #[derive(
     Debug,
@@ -37,17 +35,74 @@ use crate::blocks::serde_any_unit::BlockKindUnitSerDe;
 )]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
-#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[cfg_attr(feature = "serde", serde(from = "BlockKindUnitSerDe"))]
-#[cfg_attr(feature = "serde", serde(into = "BlockKindUnitSerDe"))]
+#[cfg_attr(feature = "serde", serde(untagged))]
 #[display("{_variant}")]
 pub enum BlockKindUnit {
-    Event(#[cfg_attr(feature = "utoipa", schema(inline))] EventBlockKindUnit),
-    ExprCmp(#[cfg_attr(feature = "utoipa", schema(inline))] ExprOrCmpBlockKindUnit),
-    Stmt(#[cfg_attr(feature = "utoipa", schema(inline))] StmtBlockKindUnit),
+    Event(EventBlockKindUnit),
+    ExprCmp(ExprOrCmpBlockKindUnit),
+    Stmt(StmtBlockKindUnit),
+    Proc(ProcKindUnit),
+}
+
+#[cfg(feature = "utoipa")]
+impl utoipa::PartialSchema for BlockKindUnit {
+    fn schema() -> utoipa::openapi::RefOr<utoipa::openapi::schema::Schema> {
+        let inner = [
+            EventBlockKindUnit::schema(),
+            ExprBlockKindUnit::schema(),
+            CmpBlockKindUnit::schema(),
+            StmtBlockKindUnit::schema(),
+            ProcKindUnit::schema(),
+        ];
+
+        use itertools::Itertools;
+        use utoipa::openapi::RefOr;
+        use utoipa::openapi::schema::Schema;
+
+        let enum_values = inner
+            .into_iter()
+            .flat_map(|s| match s {
+                RefOr::T(Schema::Object(o)) => o.enum_values,
+                _ => panic!("unexpected schema kind"),
+            })
+            .flatten()
+            .sorted_by_key(ToString::to_string)
+            .collect_vec();
+
+        let mut object = utoipa::openapi::schema::Object::new();
+        object.enum_values = Some(enum_values);
+
+        RefOr::T(Schema::Object(object))
+    }
+}
+#[cfg(feature = "utoipa")]
+impl utoipa::ToSchema for BlockKindUnit {
+    fn name() -> std::borrow::Cow<'static, str> {
+        "BlockKindUnit".into()
+    }
+}
+
+#[derive(
+    Debug,
+    derive_more::From,
+    PartialEq,
+    Clone,
+    Copy,
+    derive_more::Display,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub enum ProcKindUnit {
     #[display("procedures_prototype")]
+    #[cfg_attr(feature = "serde", serde(rename = "procedures_prototype"))]
     ProceduresPrototype,
     #[display("procedures_definition")]
+    #[cfg_attr(feature = "serde", serde(rename = "procedures_definition"))]
     ProceduresDefinition,
 }
 
@@ -81,8 +136,10 @@ impl AsOpcodeUnit for BlockKind {
             Self::ExprCmp(ExprOrCmpBlockKind::Expr(u)) => u.opcode().into(),
             Self::Event(u) => u.opcode().into(),
             Self::Stmt(u) => u.opcode().into(),
-            Self::ProceduresPrototype(_) => BlockKindUnit::ProceduresPrototype,
-            Self::ProceduresDefinition(_) => BlockKindUnit::ProceduresDefinition,
+            Self::ProceduresPrototype(_) => BlockKindUnit::Proc(ProcKindUnit::ProceduresPrototype),
+            Self::ProceduresDefinition(_) => {
+                BlockKindUnit::Proc(ProcKindUnit::ProceduresDefinition)
+            }
         }
     }
 }

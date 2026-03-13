@@ -4,7 +4,6 @@ mod events;
 mod expr_or_cmp;
 mod expressions;
 mod procedures;
-mod serde_any_unit;
 mod statements;
 
 pub use crate::aux::opcode_trait::{AsOpcodeName, AsOpcodeUnit};
@@ -18,7 +17,7 @@ pub use crate::scopes::block_wrapper::BlockWrapper;
 #[cfg(test)]
 mod test_events;
 
-pub use any::{BlockKind, BlockKindUnit};
+pub use any::{BlockKind, BlockKindUnit, ProcKindUnit};
 pub use comparisons::{CmpBlockKind, CmpBlockKindUnit};
 pub use events::{EventBlockKind, EventBlockKindUnit};
 pub use expressions::{ExprBlockKind, ExprBlockKindUnit};

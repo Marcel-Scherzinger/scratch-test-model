@@ -1,5 +1,5 @@
 use scratch_test_model::blocks::{
-    BlockKindUnit, CmpBlockKindUnit, ExprOrCmpBlockKindUnit, StmtBlockKindUnit,
+    BlockKindUnit, CmpBlockKindUnit, ExprOrCmpBlockKindUnit, ProcKindUnit, StmtBlockKindUnit,
 };
 
 #[test]
@@ -22,15 +22,15 @@ fn test_serde_block_kind_unit() {
     let b: CmpBlockKindUnit = serde_json::from_str(&string).unwrap();
     assert_eq!(CmpBlockKindUnit::OperatorOr, b);
 
-    let x = BlockKindUnit::ProceduresPrototype;
+    let x = BlockKindUnit::Proc(ProcKindUnit::ProceduresPrototype);
     let string = serde_json::to_string(&x).unwrap();
     assert_eq!(r#""procedures_prototype""#, string.as_str());
     let b: BlockKindUnit = serde_json::from_str(&string).unwrap();
-    assert_eq!(BlockKindUnit::ProceduresPrototype, b);
+    assert_eq!(BlockKindUnit::Proc(ProcKindUnit::ProceduresPrototype), b);
 
-    let x = BlockKindUnit::ProceduresDefinition;
+    let x = BlockKindUnit::Proc(ProcKindUnit::ProceduresDefinition);
     let string = serde_json::to_string(&x).unwrap();
     assert_eq!(r#""procedures_definition""#, string.as_str());
     let b: BlockKindUnit = serde_json::from_str(&string).unwrap();
-    assert_eq!(BlockKindUnit::ProceduresDefinition, b);
+    assert_eq!(BlockKindUnit::Proc(ProcKindUnit::ProceduresDefinition), b);
 }
