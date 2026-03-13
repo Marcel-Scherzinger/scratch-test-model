@@ -42,9 +42,9 @@ use crate::blocks::serde_any_unit::BlockKindUnitSerDe;
 #[cfg_attr(feature = "serde", serde(into = "BlockKindUnitSerDe"))]
 #[display("{_variant}")]
 pub enum BlockKindUnit {
-    Event(EventBlockKindUnit),
-    ExprCmp(ExprOrCmpBlockKindUnit),
-    Stmt(StmtBlockKindUnit),
+    Event(#[cfg_attr(feature = "utoipa", schema(inline))] EventBlockKindUnit),
+    ExprCmp(#[cfg_attr(feature = "utoipa", schema(inline))] ExprOrCmpBlockKindUnit),
+    Stmt(#[cfg_attr(feature = "utoipa", schema(inline))] StmtBlockKindUnit),
     #[display("procedures_prototype")]
     ProceduresPrototype,
     #[display("procedures_definition")]
