@@ -71,6 +71,7 @@ impl utoipa::PartialSchema for BlockKindUnit {
 
         let mut object = utoipa::openapi::schema::Object::new();
         object.enum_values = Some(enum_values);
+        object.description = Some(r#"For more information see <a href="https://marcel-scherzinger.github.io/scratch-test-model/scratch_test_model/blocks/enum.BlockKindUnit.html">BlockKindUnit</a>"#.to_string());
 
         RefOr::T(Schema::Object(object))
     }
