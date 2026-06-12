@@ -35,6 +35,9 @@ impl<Kind, Data> TargetData<Kind, Data> {
     pub fn ids(&self) -> impl Iterator<Item = &Id> {
         self.map.keys()
     }
+    pub fn iter(&self) -> impl Iterator<Item = (&Id, &Data)> {
+        self.map.iter()
+    }
     pub fn get<'a>(&'a self, id: &Id) -> Option<&'a Data> {
         self.map.get(id)
     }
