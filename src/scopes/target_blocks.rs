@@ -19,6 +19,8 @@ pub struct TargetBlocks {
 
 /// Produced by for example [`ProjectDoc::get_specific_kind`](crate::scopes::ProjectDoc::get_specific_kind).
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, thiserror::Error)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "kebab-case"))]
 pub enum BlockReferenceInvalid {
     #[error("the tried id doesn't belong to a valid block")]
     IdNotFound,
