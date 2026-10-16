@@ -1,3 +1,6 @@
+//! > [!NOTE]
+//! > This project was merged into [github:marcel-scherzinger/bast3st-scratch](https://github.com/marcel-scherzinger/bast3st-scratch)
+//!
 //! Model to parse the [`*.sb3` file format](https://en.scratch-wiki.info/wiki/Scratch_File_Format)
 //! of the [Scratch](https://scratch.mit.edu/) block-oriented programming language
 //!

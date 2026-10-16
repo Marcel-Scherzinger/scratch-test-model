@@ -1,6 +1,9 @@
 [![Documentation on GitHub Pages](https://github.com/marcel-scherzinger/scratch-test-model/actions/workflows/deploy-docs-to-pages.yml/badge.svg)](https://marcel-scherzinger.github.io/scratch-test-model)
 [![100% Rust](https://img.shields.io/badge/Rust-100%25-32c955?logo=rust)](https://rust-lang.org)
 
+> **Note**
+This project was merged into [github:marcel-scherzinger/bast3st-scratch](https://github.com/marcel-scherzinger/bast3st-scratch)
+
 # About
 
 The block-oriented programming language [Scratch](https://scratch.mit.edu/)
