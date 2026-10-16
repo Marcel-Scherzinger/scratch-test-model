@@ -3,38 +3,15 @@ name = "scratch-test-model"
 version = "0.1.0"
 edition = "2024"
 
-[dependencies]
-serde_json = "1.0"
-thiserror = "2"
-derive_more = { version = "2.1", features = ["display", "from", "debug", "deref"] }
-zip = { version = "8.2", optional = true, default-features = false, features = ["deflate64", "deflate"] }
-log = "0.4.28"
-derive-getters = "0.5.0"
-const-str = { version = "0.7.0", default-features = false }
-itertools = "0.14.0"
-
-scratch-test-model-proc = { path = "./scratch-test-model-proc" }
-ouroboros = {version = "0.18.5", optional = true}
-either = "1.15.0"
-serde = { version = "1.0", features = ["derive", "rc"], optional = true }
-schemars = { version = "1.2.1", optional = true }
-utoipa = { version = "5.5", optional = true }
-
-[dependencies.svalue]
-git = "https://github.com/Marcel-Scherzinger/scratch-test-value"
-package = "scratch-test-value"
-features = ["serde_json"]
-
-[dev-dependencies]
-walkdir = "2.5.0"
-rayon = "1.11.0"
-serde_json = "1.0"
-self = { path = ".", features = ["serde", "schemars"], package = "scratch-test-model" }
+[dependencies.smodel]
+git = "https://github.com/marcel-scherzinger/bast3st-scratch"
+package = "scratch-test-model"
+default-features = false
 
 [features]
 default = ["sb3"]
-sb3 = [ "dep:zip", "dep:ouroboros" ]
-thread-share = ["svalue/thread-share"]
-serde = ["dep:serde"]
-schemars = ["dep:schemars", "serde", "svalue/schemars"]
-utoipa = ["dep:utoipa", "serde", "svalue/utoipa"]
+sb3 = [ "smodel/sb3" ]
+thread-share = ["smodel/thread-share"]
+serde = ["smodel/serde"]
+schemars = ["smodel/schemars"]
+utoipa = ["smodel/utoipa"]
